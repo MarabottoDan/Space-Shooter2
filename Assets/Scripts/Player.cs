@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float _speed = 5.6f;
     private float _speedMultiplier = 2;
-    [SerializeField] float _shiftSpeed = 8.5f;
+    [SerializeField] float _shiftSpeed = 10f;
     private bool _isSpeedBoostActive = false;
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField]
@@ -19,6 +19,13 @@ public class Player : MonoBehaviour
     [SerializeField] private bool _isShieldsActive = false;
     [SerializeField] private GameObject _shieldVisualizer;
     [SerializeField] private GameObject _rightEngine, _leftEngine;
+    [SerializeField] private GameObject _thrustersCharge; // added this field in Unity
+    private bool _leftEngineOn = false;
+    private bool _rightEngineOn = false;
+    
+
+
+
     [SerializeField] private int _score;
     private UIManager _uiManager;
     private string[] _hitMessages =
@@ -28,7 +35,7 @@ public class Player : MonoBehaviour
         "Why can't we be friends?",
         "Oh you're going to pay for that!"
      };
-    private bool _isGameOver = false;
+   // private bool _isGameOver = false;
     [SerializeField] private AudioClip _laserSoundClip;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _playerDestroyedSound;
@@ -36,6 +43,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -64,6 +72,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         Calculatemovement();
+        ThrusterSpeed();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
@@ -74,20 +83,10 @@ public class Player : MonoBehaviour
     void Calculatemovement()
 
     {
-        // write these with the other variables (floats)
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 _direction = new Vector3(horizontalInput, verticalInput, 0);
-
-        if (Input.GetKey(KeyCode.LeftShift) && !_isSpeedBoostActive)
-        {
-            _speed = _shiftSpeed;
-        }
-        else if (!_isSpeedBoostActive)
-        {
-            _speed = 5.6f;
-        }
 
         transform.Translate(_direction * _speed * Time.deltaTime);
 
@@ -111,6 +110,21 @@ public class Player : MonoBehaviour
         }
 
      
+    }
+
+    void ThrusterSpeed()
+
+    {
+           
+         if (Input.GetKey(KeyCode.LeftShift) && !_isSpeedBoostActive && _uiManager.Thrusters_Bar_Fill)
+         {
+             _speed = _shiftSpeed;
+         }
+         else if (!_isSpeedBoostActive)
+         {
+             _speed = 5.6f;
+         }
+        
     }
 
     void FireLaser()
@@ -143,14 +157,45 @@ public class Player : MonoBehaviour
         //_lives = _lives -1;
         // _lives--;
 
-        if(_lives == 2)
+        //if(_lives == 2)
+        //{
+        //   _leftEngine.SetActive(true);
+        //}
+        //else if (_lives == 1)
+        // {
+        //     _rightEngine.SetActive(true);
+        //}
+
+        //HERE
+        if (_lives == 2)
         {
-            _leftEngine.SetActive(true);
+            // Pick a random engine to show first
+            if (Random.value < 0.5f)
+            {
+                _leftEngine.SetActive(true);
+                _leftEngineOn = true;
+            }
+            else
+            {
+                _rightEngine.SetActive(true);
+                _rightEngineOn = true;
+            }
         }
         else if (_lives == 1)
         {
-            _rightEngine.SetActive(true);
+            // Show the engine that hasn’t already been shown
+            if (!_leftEngineOn)
+            {
+                _leftEngine.SetActive(true);
+                _leftEngineOn = true;
+            }
+            else if (!_rightEngineOn)
+            {
+                _rightEngine.SetActive(true);
+                _rightEngineOn = true;
+            }
         }
+
 
         int randomIndex = Random.Range(0, _hitMessages.Length);
         Debug.Log(_hitMessages[randomIndex]);
