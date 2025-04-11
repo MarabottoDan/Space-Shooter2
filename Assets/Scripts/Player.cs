@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+
+
 
 public class Player : MonoBehaviour
 
@@ -16,18 +19,37 @@ public class Player : MonoBehaviour
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
+
+    [Header("Ammo Settings")]
+    // [SerializeField] private int _fullAmmo;
+    [SerializeField] private int _maxAmmo = 15;//Max Ammo
+    public int _currentAmmo;//Current Ammo
+    public Text _ammoText;//Reference to the Text component that displays ammo count
+
+
+    [Header("Shields")]
     [SerializeField] private bool _isShieldsActive = false;
-    [SerializeField] private GameObject _shieldVisualizer;
+    [SerializeField] private GameObject _shieldVisualizer;// Blue shield visualizer
+    [SerializeField] private GameObject _shieldVisualizer1;//Green shield visualizer
+    [SerializeField] private GameObject _shieldVisualizer2;//Red shield visualizer
+    private int _shieldHits;// Hits the shield can take
+
+    [Header("Thrusters")]
     [SerializeField] private GameObject _rightEngine, _leftEngine;
-    [SerializeField] private GameObject _thrustersCharge; // added this field in Unity
+    [SerializeField] private GameObject _thrustersCharge; 
     private bool _leftEngineOn = false;
     private bool _rightEngineOn = false;
-    
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip _noAmmoClip;
+    [SerializeField] private AudioClip _laserSoundClip;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _playerDestroyedSound;
 
 
 
     [SerializeField] private int _score;
-    private UIManager _uiManager;
+    private UIManager _uiManager; //This reference connects the UIManager script (where the thruster bar is managed) to the Player script.
     private string[] _hitMessages =
     {
         "I've been hit!",
@@ -36,14 +58,13 @@ public class Player : MonoBehaviour
         "Oh you're going to pay for that!"
      };
    // private bool _isGameOver = false;
-    [SerializeField] private AudioClip _laserSoundClip;
-    [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _playerDestroyedSound;
+  
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _currentAmmo = _maxAmmo;
+        UpdateAmmoUI();
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -76,8 +97,9 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            FireLaser();
+            FireLaser();            
         }
+      
     }
 
     void Calculatemovement()
@@ -117,8 +139,9 @@ public class Player : MonoBehaviour
     {
            
          if (Input.GetKey(KeyCode.LeftShift) && !_isSpeedBoostActive && _uiManager.Thrusters_Bar_Fill)
-         {
-             _speed = _shiftSpeed;
+        //This checks if the Left Shift key is pressed, whether the speed boost is already active, and whether there is fuel left in the thruster bar
+        {
+            _speed = _shiftSpeed;
          }
          else if (!_isSpeedBoostActive)
          {
@@ -127,8 +150,23 @@ public class Player : MonoBehaviour
         
     }
 
+    void UpdateAmmoUI()
+    {
+        _ammoText.text = _currentAmmo.ToString();
+
+    }
     void FireLaser()
     {
+        if (_currentAmmo <= 0)
+        {
+            Debug.Log("Playing no ammo clip");
+            _audioSource.PlayOneShot(_noAmmoClip);
+
+            //AudioSource.PlayClipAtPoint(_noAmmoClip, transform.position);
+            return;
+        }
+        _currentAmmo--;//Decrease Ammo when firing
+        UpdateAmmoUI();//Update UI with the new ammo count
         _canFire = Time.time + _fireRate;
 
         if (_isTripleShotActive == true)
@@ -143,33 +181,60 @@ public class Player : MonoBehaviour
         _audioSource.Play();
 
     }
+    // This method sets the color of the shield's material
+    private void SetShieldColor(Color color)
+    {
+        // Assumes the shield GameObject has a Renderer with a material you can change
+        _shieldVisualizer.GetComponent<Renderer>().material.color = color;
+    }
 
+
+    public void ShieldsActive()
+    {
+        if (_isShieldsActive)
+        {
+            Debug.Log("No Extra Shields for YOU");
+            return;//If shield is active, prevents from another shield powerup being activated
+        }
+        _shieldHits = 3;
+        _isShieldsActive = true; 
+        _shieldVisualizer.SetActive(true); //Blue on
+
+    }
     public void Damage()
     {
-        if (_isShieldsActive == true) 
+
+        if (_isShieldsActive) // Check if the shield is active
         {
-            _isShieldsActive = false;
-            _shieldVisualizer.SetActive(false);
-            Debug.Log("Shields down! Panic mode engaged!");
-            return;
-        }
-        _lives -= 1;
+            _shieldHits--; // Decrease shield hit count by 1
+
+            if (_shieldHits == 2)
+            {
+                SetShieldColor(Color.green); // Change shield color to green after 1 hit
+                return; // Exit the method early
+            }
+            else if (_shieldHits == 1)
+            {
+                SetShieldColor(Color.red); // Change shield color to red after 2 hits
+                return; // Exit the method early
+            }
+            else if (_shieldHits <= 0)
+            {
+                SetShieldColor(Color.white);//Changes shield color back to original color of the sprite
+                _isShieldsActive = false; // Mark the shield as inactive
+                _shieldVisualizer.SetActive(false); // Hide the shield visual
+                Debug.Log("Shields down! Panic mode engaged!"); // Log message
+                return; // Exit the method
+            }
+            
+         }
+            _lives -= 1;
         //_lives = _lives -1;
         // _lives--;
 
-        //if(_lives == 2)
-        //{
-        //   _leftEngine.SetActive(true);
-        //}
-        //else if (_lives == 1)
-        // {
-        //     _rightEngine.SetActive(true);
-        //}
-
-        //HERE
         if (_lives == 2)
         {
-            // Pick a random engine to show first
+          
             if (Random.value < 0.5f)
             {
                 _leftEngine.SetActive(true);
@@ -245,13 +310,10 @@ public class Player : MonoBehaviour
     Debug.Log("SNAIL SPEED Activated");
         _speed /= _speedMultiplier;
     }
-    public void ShieldsActive()
-    {
-       _isShieldsActive = true;
-       _shieldVisualizer.SetActive(true);
-        
-        
-    }
+
+
+
+
 
     public void AddScore(int points)
     {

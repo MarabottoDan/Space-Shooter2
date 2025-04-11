@@ -13,7 +13,7 @@ public class Powerup : MonoBehaviour
         "Time to light you up!"
    };
 
-    [SerializeField] private AudioClip _clip; //DONE
+    [SerializeField] private AudioClip _clip; 
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +38,7 @@ public class Powerup : MonoBehaviour
         {
             Player player = other.transform.GetComponent<Player>();
         
-           AudioSource.PlayClipAtPoint(_clip, transform.position); //DONE
+           AudioSource.PlayClipAtPoint(_clip, transform.position); 
             {
                switch(_powerupID)
                 {
@@ -53,7 +53,7 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         player.ShieldsActive();
-                        Debug.Log("I eat Spaceships for breakfast now");
+                        //Debug.Log("I eat Spaceships for breakfast now");
                         break;
                     default:
                         Debug.Log("Default Value");
