@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
+    private bool _isDead = false;
     
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_isDead) return;
+
         CalculateMovement();
 
         if(Time.time > _canFire)
@@ -96,6 +99,7 @@ public class Enemy : MonoBehaviour
 
     void OnDeath()
     {
+        _isDead = true;
         _anim.SetTrigger("OnEnemyDeath");
         _verticalspeed = 1.5f;
         _audioSource.Play();

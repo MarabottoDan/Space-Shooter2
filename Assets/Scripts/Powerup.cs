@@ -2,10 +2,10 @@
 
 public class Powerup : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 3.0f;
-   [SerializeField] //0 = Triple Shot 1 = Speed 2 = Shields
-    private int _powerupID;
+    [SerializeField]private float _speed = 3.0f;
+    [SerializeField]private int _powerupID;
+    //0 = Triple Shot 1 = Speed 2 = Shields
+
     private string[] _tripleShotText =
    {
         "Triple shot BABY!!!",
@@ -37,8 +37,13 @@ public class Powerup : MonoBehaviour
         if (other.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
-        
-           AudioSource.PlayClipAtPoint(_clip, transform.position); 
+
+            if (_powerupID == 3)  
+            {
+                AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f); 
+            }
+            else
+                AudioSource.PlayClipAtPoint(_clip, transform.position); 
             {
                switch(_powerupID)
                 {
@@ -53,7 +58,11 @@ public class Powerup : MonoBehaviour
                         break;
                     case 2:
                         player.ShieldsActive();
-                        //Debug.Log("I eat Spaceships for breakfast now");
+                        break;
+                    case 3:
+                        player.AddAmmo(10);//Adds 10 ammo 
+                        player.UpdateUIAmmo();// Update the UI to reflect new ammo count
+                        Debug.Log("Ammo Loaded");
                         break;
                     default:
                         Debug.Log("Default Value");

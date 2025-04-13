@@ -19,12 +19,14 @@ public class Player : MonoBehaviour
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
+    
 
     [Header("Ammo Settings")]
     // [SerializeField] private int _fullAmmo;
     [SerializeField] private int _maxAmmo = 15;//Max Ammo
     public int _currentAmmo;//Current Ammo
     public Text _ammoText;//Reference to the Text component that displays ammo count
+
 
 
     [Header("Shields")]
@@ -279,6 +281,17 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    public void UpdateUIAmmo()
+    {
+        _ammoText.text =  _currentAmmo.ToString();  // Update the UI text to show current ammo
+    }
+    public void AddAmmo(int amount)
+    {
+        _currentAmmo += amount;
+        _currentAmmo = Mathf.Min(_currentAmmo, _maxAmmo);
+    }
+
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
