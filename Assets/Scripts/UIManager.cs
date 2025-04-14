@@ -51,6 +51,7 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
+        currentLives = Mathf.Clamp(currentLives, 0, _liveSprites.Length - 1);
 
         _livesImg.sprite = _liveSprites[currentLives];
 

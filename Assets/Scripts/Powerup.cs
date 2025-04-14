@@ -38,37 +38,49 @@ public class Powerup : MonoBehaviour
         {
             Player player = other.transform.GetComponent<Player>();
 
-            if (_powerupID == 3)  
-            {
-                AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f); 
-            }
-            else
-                AudioSource.PlayClipAtPoint(_clip, transform.position); 
-            {
+           
                switch(_powerupID)
                 {
                     case 0:
+                        AudioSource.PlayClipAtPoint(_clip, transform.position);
                         player.TripleShotActive();
                         int randomIndex = Random.Range(0, _tripleShotText.Length);
                         Debug.Log(_tripleShotText[randomIndex]);
                         break;
                     case 1:
+                        AudioSource.PlayClipAtPoint(_clip, transform.position);
                         player.SpeedBoostActive();
                         Debug.Log("I’m faster than my Wi-Fi!");
                         break;
                     case 2:
+                        AudioSource.PlayClipAtPoint(_clip, transform.position);
                         player.ShieldsActive();
                         break;
                     case 3:
+                        AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f);
                         player.AddAmmo(10);//Adds 10 ammo 
                         player.UpdateUIAmmo();// Update the UI to reflect new ammo count
                         Debug.Log("Ammo Loaded");
                         break;
+                    case 4:
+                        if (player.GetCurrentLives() < player.GetMaxLives())
+                        {
+                            AudioSource.PlayClipAtPoint(_clip, transform.position);
+                            player.AddLife();
+                            Debug.Log("Life Added");
+                        }
+                        else
+                        {
+                            player.PlayNoMoreLivesForYouClip();
+                            Debug.Log("Max lives already, No more lives for you");
+                        }
+                        break;
+
                     default:
                         Debug.Log("Default Value");
                         break;
                 }
-            }
+            
             
             Destroy(this.gameObject);
         }

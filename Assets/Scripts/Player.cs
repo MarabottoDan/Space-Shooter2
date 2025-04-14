@@ -12,17 +12,18 @@ public class Player : MonoBehaviour
     [SerializeField] float _shiftSpeed = 10f;
     private bool _isSpeedBoostActive = false;
     [SerializeField] private GameObject _laserPrefab;
-    [SerializeField]
-    private GameObject _tripleShotPrefab;
+    [SerializeField] private GameObject _tripleShotPrefab;
     [SerializeField] private float _fireRate = 0.5f;
-    private float _canFire = -1f;
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
-    
+    private float _canFire = -1f;
+    private float _addLife = 1f;
+    private int _maxLives = 3;
+
 
     [Header("Ammo Settings")]
-    // [SerializeField] private int _fullAmmo;
+    
     [SerializeField] private int _maxAmmo = 15;//Max Ammo
     public int _currentAmmo;//Current Ammo
     public Text _ammoText;//Reference to the Text component that displays ammo count
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _laserSoundClip;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _playerDestroyedSound;
+    [SerializeField] private AudioClip _noMoreLivesForYouClip;
 
 
 
@@ -65,8 +67,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _currentAmmo = _maxAmmo;
-        UpdateAmmoUI();
+        _currentAmmo = _maxAmmo;//Set current ammo to max at game start
+        UpdateAmmoUI();//Update the UI with the initial ammo value
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -154,22 +156,20 @@ public class Player : MonoBehaviour
 
     void UpdateAmmoUI()
     {
-        _ammoText.text = _currentAmmo.ToString();
+        _ammoText.text = _currentAmmo.ToString();//Displays the number of ammo
 
     }
     void FireLaser()
     {
-        if (_currentAmmo <= 0)
+        if (_currentAmmo <= 0)//Check if player has ammo
         {
             Debug.Log("Playing no ammo clip");
-            _audioSource.PlayOneShot(_noAmmoClip);
-
-            //AudioSource.PlayClipAtPoint(_noAmmoClip, transform.position);
+            _audioSource.PlayOneShot(_noAmmoClip);//Play no ammo sound
             return;
         }
         _currentAmmo--;//Decrease Ammo when firing
         UpdateAmmoUI();//Update UI with the new ammo count
-        _canFire = Time.time + _fireRate;
+        _canFire = Time.time + _fireRate;//How fast we can fire
 
         if (_isTripleShotActive == true)
         {
@@ -276,20 +276,76 @@ public class Player : MonoBehaviour
             _audioSource.Play();
             Destroy(this.gameObject);
             Debug.Log("I'm space dust now :(");
-            
-
         }
-
     }
 
+    public void AddLife()
+    {
+        if (_lives < _maxLives)
+        {
+            _lives += (int)_addLife;
+            _uiManager.UpdateLives(_lives); //Update the UI to reflect the new lives count
+
+            if (_lives == 2)
+            {
+                if  (_leftEngineOn &&_rightEngineOn)
+                {
+                    if (Random.value < 0.5f)
+                    {
+                        _leftEngine.SetActive(false);
+                        _leftEngineOn = false;
+                    }
+                    else
+                    {
+                        _rightEngine.SetActive(false);
+                        _rightEngineOn = false;
+                    }
+                }
+
+            }
+            else if (_lives == 3)
+            {
+                if (_leftEngineOn)
+                {
+                    _leftEngine.SetActive(false);
+                    _leftEngineOn = false;
+                }
+                if (_rightEngineOn)
+                {
+                    _rightEngine.SetActive(false);
+                    _rightEngineOn = false;
+                }
+            }
+            return;
+        }
+        else
+        {
+            Debug.Log("Max lives reached");
+            _audioSource.PlayOneShot(_noMoreLivesForYouClip);
+        }
+    }
+
+    public int GetCurrentLives()
+    {
+        return _lives;
+    }
+
+    public int GetMaxLives()
+    {
+        return _maxLives;
+    }
+    public void PlayNoMoreLivesForYouClip()
+    {
+        _audioSource.PlayOneShot(_noMoreLivesForYouClip);
+    }
     public void UpdateUIAmmo()
     {
         _ammoText.text =  _currentAmmo.ToString();  // Update the UI text to show current ammo
     }
     public void AddAmmo(int amount)
     {
-        _currentAmmo += amount;
-        _currentAmmo = Mathf.Min(_currentAmmo, _maxAmmo);
+        _currentAmmo += amount; // Increase _currentAmmo by the amount passed into the AddAmmo method
+        _currentAmmo = Mathf.Min(_currentAmmo, _maxAmmo); // Prevents ammo from going over max
     }
 
     public void TripleShotActive()
