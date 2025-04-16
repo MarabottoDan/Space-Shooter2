@@ -63,19 +63,24 @@ public class Powerup : MonoBehaviour
                         Debug.Log("Ammo Loaded");
                         break;
                     case 4:
-                        if (player.GetCurrentLives() < player.GetMaxLives())
-                        {
-                            AudioSource.PlayClipAtPoint(_clip, transform.position);
-                            player.AddLife();
-                            Debug.Log("Life Added");
+                        if (player.GetCurrentLives() < player.GetMaxLives())// Check if the player currently has fewer than the maximum allowed lives
+                    {
+                            AudioSource.PlayClipAtPoint(_clip, transform.position);// Play the health pickup audio clip
+                            player.AddLife();// Add one life to the player and update relevant visuals (like engine fire and UI)
+                        Debug.Log("Life Added");
                         }
                         else
                         {
+                        // If the player already has max lives, play a different audio
                             player.PlayNoMoreLivesForYouClip();
                             Debug.Log("Max lives already, No more lives for you");
                         }
                         break;
-
+                    case 5:
+                    AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f);
+                    player.ActivateChainLightning();
+                    Debug.Log("⚡BOLT STORM ONLINE!");
+                        break;
                     default:
                         Debug.Log("Default Value");
                         break;

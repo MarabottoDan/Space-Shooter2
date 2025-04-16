@@ -13,13 +13,20 @@ public class Player : MonoBehaviour
     private bool _isSpeedBoostActive = false;
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _tripleShotPrefab;
+
+    [Header("Chain Lightning")]
+    [SerializeField] private GameObject _chainLightningShotPrefab;
+    [SerializeField] private bool _isChainLightningActive = false;
+
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
+    
     private float _canFire = -1f;
-    private float _addLife = 1f;
+    private float _addLife = 1f;//Adds 1 live to the player
     private int _maxLives = 3;
+   
 
 
     [Header("Ammo Settings")]
@@ -48,7 +55,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _laserSoundClip;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _playerDestroyedSound;
-    [SerializeField] private AudioClip _noMoreLivesForYouClip;
+    [SerializeField] private AudioClip _noMoreLivesForYouClip;// Clip for when player has full lives and collects Health PowerUp
 
 
 
@@ -101,10 +108,33 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            FireLaser();            
+            _canFire = Time.time + _fireRate;
+
+            if (_isChainLightningActive)
+            {
+                Instantiate(_chainLightningShotPrefab, transform.position + new Vector3(0, 0.8f,0), Quaternion.identity);
+                transform.Translate(Vector3.up * _speed * Time.deltaTime);
+            }
+            else
+            {
+                FireLaser();
+            }     
         }
       
     }
+
+    public void ActivateChainLightning()
+    {
+        _isChainLightningActive = true;
+        StartCoroutine(ChainLightningCooldown());
+    }
+
+    private IEnumerator ChainLightningCooldown()
+    {
+        yield return new WaitForSeconds(5f);
+        _isChainLightningActive = false;
+    }
+
 
     void Calculatemovement()
 
@@ -206,33 +236,32 @@ public class Player : MonoBehaviour
     public void Damage()
     {
 
-        if (_isShieldsActive) // Check if the shield is active
+        if (_isShieldsActive) 
         {
-            _shieldHits--; // Decrease shield hit count by 1
+            _shieldHits--; 
 
             if (_shieldHits == 2)
             {
-                SetShieldColor(Color.green); // Change shield color to green after 1 hit
-                return; // Exit the method early
+                SetShieldColor(Color.green); 
+                return; 
             }
             else if (_shieldHits == 1)
             {
-                SetShieldColor(Color.red); // Change shield color to red after 2 hits
-                return; // Exit the method early
+                SetShieldColor(Color.red); 
+                return; 
             }
             else if (_shieldHits <= 0)
             {
-                SetShieldColor(Color.white);//Changes shield color back to original color of the sprite
-                _isShieldsActive = false; // Mark the shield as inactive
-                _shieldVisualizer.SetActive(false); // Hide the shield visual
-                Debug.Log("Shields down! Panic mode engaged!"); // Log message
-                return; // Exit the method
+                SetShieldColor(Color.white);
+                _isShieldsActive = false; 
+                _shieldVisualizer.SetActive(false); 
+                Debug.Log("Shields down! Panic mode engaged!"); 
+                return; 
             }
             
          }
             _lives -= 1;
-        //_lives = _lives -1;
-        // _lives--;
+        //_lives = _lives -1;// _lives--;
 
         if (_lives == 2)
         {
@@ -279,18 +308,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Method to add a life to the player. Returns true if a life was added, false otherwise.
     public void AddLife()
     {
-        if (_lives < _maxLives)
+        if (_lives < _maxLives)// Check if the current lives are less than the maximum allowed
         {
-            _lives += (int)_addLife;
+            _lives += (int)_addLife;// Increase the lives by 1
             _uiManager.UpdateLives(_lives); //Update the UI to reflect the new lives count
 
-            if (_lives == 2)
+            if (_lives == 2)// If player now has 2 lives, turn off one of the two engine fires randomly
             {
-                if  (_leftEngineOn &&_rightEngineOn)
+                if  (_leftEngineOn &&_rightEngineOn)// Only proceed if both engines are currently on fire
                 {
-                    if (Random.value < 0.5f)
+                    if (Random.value < 0.5f)// Randomly choose to turn off either the left or right engine fire
                     {
                         _leftEngine.SetActive(false);
                         _leftEngineOn = false;
@@ -303,7 +333,7 @@ public class Player : MonoBehaviour
                 }
 
             }
-            else if (_lives == 3)
+            else if (_lives == 3)// If player now has full health (3 lives), turn off both engine fires
             {
                 if (_leftEngineOn)
                 {
@@ -321,20 +351,21 @@ public class Player : MonoBehaviour
         else
         {
             Debug.Log("Max lives reached");
+            // Play a sound indicating no more lives can be added
             _audioSource.PlayOneShot(_noMoreLivesForYouClip);
         }
     }
 
-    public int GetCurrentLives()
+    public int GetCurrentLives()// Returns the player's current number of lives
     {
         return _lives;
     }
 
-    public int GetMaxLives()
+    public int GetMaxLives()// Returns the maximum number of lives the player can have
     {
         return _maxLives;
     }
-    public void PlayNoMoreLivesForYouClip()
+    public void PlayNoMoreLivesForYouClip()//Plays clip
     {
         _audioSource.PlayOneShot(_noMoreLivesForYouClip);
     }
@@ -347,6 +378,8 @@ public class Player : MonoBehaviour
         _currentAmmo += amount; // Increase _currentAmmo by the amount passed into the AddAmmo method
         _currentAmmo = Mathf.Min(_currentAmmo, _maxAmmo); // Prevents ammo from going over max
     }
+
+    
 
     public void TripleShotActive()
     {
@@ -379,10 +412,6 @@ public class Player : MonoBehaviour
     Debug.Log("SNAIL SPEED Activated");
         _speed /= _speedMultiplier;
     }
-
-
-
-
 
     public void AddScore(int points)
     {
