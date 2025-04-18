@@ -15,8 +15,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _tripleShotPrefab;
 
     [Header("Chain Lightning")]
-    [SerializeField] private GameObject _chainLightningShotPrefab;
-    [SerializeField] private bool _isChainLightningActive = false;
+    [SerializeField] private GameObject _chainLightningShotPrefab;// Reference to the bolt projectile prefab (assign in Inspector)
+    [SerializeField] private bool _isChainLightningActive = false;// Tracks whether chain lightning is currently active
 
     [SerializeField] private float _fireRate = 0.5f;
     [SerializeField] private int _lives = 3;
@@ -68,12 +68,14 @@ public class Player : MonoBehaviour
         "Why can't we be friends?",
         "Oh you're going to pay for that!"
      };
-   // private bool _isGameOver = false;
-  
+    // private bool _isGameOver = false;
+    private CameraShake _cameraShake;
 
     // Start is called before the first frame update
     void Start()
     {
+        _cameraShake = Camera.main.GetComponent<CameraShake>();
+        // Cache the CameraShake script from the main camera once at the start
         _currentAmmo = _maxAmmo;//Set current ammo to max at game start
         UpdateAmmoUI();//Update the UI with the initial ammo value
         transform.position = new Vector3(0, 0, 0);
@@ -113,7 +115,9 @@ public class Player : MonoBehaviour
             if (_isChainLightningActive)
             {
                 Instantiate(_chainLightningShotPrefab, transform.position + new Vector3(0, 0.8f,0), Quaternion.identity);
-                transform.Translate(Vector3.up * _speed * Time.deltaTime);
+                // Spawns the lightning shot slightly above the player for better visual alignment
+                transform.Translate(Vector3.down * _speed * Time.deltaTime);// This creates a small downward nudge when
+                                                                            //firing, giving the effect of recoil or power pushback
             }
             else
             {
@@ -125,14 +129,14 @@ public class Player : MonoBehaviour
 
     public void ActivateChainLightning()
     {
-        _isChainLightningActive = true;
-        StartCoroutine(ChainLightningCooldown());
+        _isChainLightningActive = true; // Enable the power-up for the player
+        StartCoroutine(ChainLightningCooldown()); // Begin countdown to disable the ability
     }
 
     private IEnumerator ChainLightningCooldown()
     {
-        yield return new WaitForSeconds(5f);
-        _isChainLightningActive = false;
+        yield return new WaitForSeconds(5f);// Allow firing for 5 seconds
+        _isChainLightningActive = false;// Disable the power-up
     }
 
 
@@ -233,8 +237,12 @@ public class Player : MonoBehaviour
         _shieldVisualizer.SetActive(true); //Blue on
 
     }
+
+
     public void Damage()
     {
+        _cameraShake.StartCoroutine(_cameraShake.Shake(1f, 0.5f));
+        // Trigger a short, subtle camera shake when the player takes damage
 
         if (_isShieldsActive) 
         {

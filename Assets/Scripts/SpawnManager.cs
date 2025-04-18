@@ -30,13 +30,30 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerupRoutine()
     {
-        yield return new WaitForSeconds(3.0f);
-        while (_stopSpawning == false)
+        yield return new WaitForSeconds(3.0f);// Wait 3 seconds before starting to spawn power-ups
+        while (_stopSpawning == false)// Continue spawning as long as the player is alive
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
-            int randomPowerUP = Random.Range(0, 6);
+            // Choose a random X position within screen bounds, Y = 12 to spawn from the top
+            int randomPowerUP = Random.Range(0, 6);// Randomly select one of the 6 power-ups
+
+            if (randomPowerUP == 5)// Check if the selected power-up is the Bolt Power-Up
+            {
+                float _rarityRoll = Random.Range(0f, 1f);// Generate a float between 0 and 1
+
+                if (_rarityRoll <= 0.15f)// Only spawn Bolt Power-Up 15% of the time
+                {
+                    Instantiate(_powerups[randomPowerUP], posToSpawn, Quaternion.identity);
+                    // Spawn rare Bolt Power-Up
+                }
+            }
+            else
+            { 
             Instantiate(_powerups[randomPowerUP], posToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(5, 15));
+                // Spawn all other power-ups with normal chance
+            }
+            yield return new WaitForSeconds(Random.Range(5, 10));
+            // Wait a random amount of time before spawning the next power-up (between 5–10 seconds)
         }
     }
 

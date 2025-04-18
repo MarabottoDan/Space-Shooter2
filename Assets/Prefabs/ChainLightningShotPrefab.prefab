@@ -141,9 +141,7 @@ MonoBehaviour:
   - {fileID: 3097141322115626162, guid: 5d055605404564545b0a71f571489a6b, type: 3}
   - {fileID: 2405693660813695898, guid: 9eddce476f94444748eb01f9a192e033, type: 3}
   - {fileID: 2930214592078044959, guid: b9cec2eb69a3740d3803b87fac35a620, type: 3}
-  _explosionDelay: 1.5
   _boltLifeTime: 0.5
-  _spawnRadius: 3
   _speed: 5
   _boltGlowPrefab: {fileID: 8229156480842395634, guid: 75ab358c476694203b4c895c35ee3de8,
     type: 3}
@@ -172,7 +170,7 @@ AudioSource:
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
-  BypassEffects: 0
+  BypassEffects: 1
   BypassListenerEffects: 0
   BypassReverbZones: 0
   rolloffCustomCurve:

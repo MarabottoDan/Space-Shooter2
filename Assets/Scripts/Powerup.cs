@@ -77,10 +77,10 @@ public class Powerup : MonoBehaviour
                         }
                         break;
                     case 5:
-                    AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f);
-                    player.ActivateChainLightning();
-                    Debug.Log("⚡BOLT STORM ONLINE!");
-                        break;
+                    AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f);// Plays a dramatic thunder sound when the power-up is collected
+                    player.ActivateChainLightning();// Activates the chain lightning ability on the player for a limited time
+                    Debug.Log("⚡BOLT STORM ONLINE!");// Debug message for confirmation
+                    break;
                     default:
                         Debug.Log("Default Value");
                         break;
