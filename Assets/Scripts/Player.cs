@@ -75,9 +75,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         _cameraShake = Camera.main.GetComponent<CameraShake>();
-        // Cache the CameraShake script from the main camera once at the start
-        _currentAmmo = _maxAmmo;//Set current ammo to max at game start
-        UpdateAmmoUI();//Update the UI with the initial ammo value
+        _currentAmmo = _maxAmmo;
+        UpdateAmmoUI();
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();

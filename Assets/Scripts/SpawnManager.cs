@@ -8,40 +8,62 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _horizontalEnemyPrefab;
     [SerializeField]private GameObject _enemyContainer;
     [SerializeField]private GameObject[] _powerups;
+   
+
+    [Header("Wave system")]
+    [SerializeField] private int _startRegularEnemyCount = 3;
+    [SerializeField] private int _startHorizontalEnemyCount = 1;
+    [SerializeField] private float _timeBetweenWaves = 5f;
+    [SerializeField] private UIManager _uiManager;
+
+    private int _currentWave = 1;
     private bool _stopSpawning = false;
+    
 
     // Start is called before the first frame update
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnEnemyWaves());
         StartCoroutine(SpawnPowerupRoutine());
-        StartCoroutine(SpawnHorizontalEnemyRoutine());
+        _uiManager.UpdateWaveText(_currentWave);
     }
 
-    IEnumerator SpawnEnemyRoutine ()
+    IEnumerator SpawnEnemyWaves()
     {
         yield return new WaitForSeconds(3.0f);
-        while (_stopSpawning == false)
-        {          
-            Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
-            GameObject newEnemy = Instantiate(_enemyprefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5.0f);
-        }     
-    }
-
-
-   IEnumerator SpawnHorizontalEnemyRoutine()
-    {
-        yield return new WaitForSeconds(15f);
-        while (_stopSpawning == false)
+        while (!_stopSpawning)
         {
-            Vector3 horizontalPos = new Vector3(-24f,Random.Range(1f, 6f), 0);
-            GameObject horizontalEnemy = Instantiate(_horizontalEnemyPrefab, horizontalPos, Quaternion.identity);
-            horizontalEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(35.0f);
+           
+            int regularEnemies = _startRegularEnemyCount + (_currentWave - 1);
+            int horizontalEnemies = _startHorizontalEnemyCount + Mathf.FloorToInt((_currentWave - 1) / 2);
 
-        }
+            for (int i = 0; i < regularEnemies; i++)
+            {
+                Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
+                GameObject newEnemy = Instantiate(_enemyprefab, posToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+
+                yield return new WaitForSeconds(0.5f);
+            }
+
+            for (int i =0; i < horizontalEnemies; i ++)
+            {
+                Vector3 horizontalPos = new Vector3(-24, Random.Range(1f, 6f), 0);
+                GameObject horizontalEnemy = Instantiate(_horizontalEnemyPrefab, horizontalPos, Quaternion.identity);
+                horizontalEnemy.transform.parent = _enemyContainer.transform;
+
+                yield return new WaitForSeconds(0.5f);
+            }
+
+            yield return new WaitUntil(() => _enemyContainer.transform.childCount == 0);
+
+           
+            Debug.Log("Wave " + _currentWave + " completed");
+            yield return _uiManager.ShowWaveCountDown(5);
+            _currentWave++;
+            _uiManager.UpdateWaveText(_currentWave);
+          
+        } 
     }
 
 

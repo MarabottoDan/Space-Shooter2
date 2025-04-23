@@ -11,6 +11,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _restartText;
     private GameManager _gameManager;
+    [SerializeField] private TextMeshProUGUI _waveCounterText;
+    [SerializeField] private TextMeshProUGUI _countdownText;
+   
+
 
 
     public Image fillImage; // Image used for the fill (foreground) of the thruster bar
@@ -124,5 +128,22 @@ public class UIManager : MonoBehaviour
         }
 
         fillImage.fillAmount = _currentFill; //Updates the fillImage of the fillAmount of the Thruster based on the _currentFill
+    }
+
+    public void UpdateWaveText( int wave)
+    {
+        _waveCounterText.text = "Wave: " + wave;
+    }
+
+    public IEnumerator ShowWaveCountDown (int seconds)
+    {
+        _countdownText.gameObject.SetActive(true);
+        for (int i= seconds; i> 0; i--)
+        {
+            _countdownText.text = "Next wave in: " + i + "...";
+            yield return new WaitForSeconds(1f);
+        }
+
+        _countdownText.gameObject.SetActive(false);
     }
 }

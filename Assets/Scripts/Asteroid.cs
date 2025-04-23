@@ -27,7 +27,7 @@ public class Asteroid : MonoBehaviour
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);      
             Destroy(other.gameObject);
             _spawnManager.StartSpawning();
-            Debug.Log("Enemy: You destroyed our asteroid; we were about to play with it. Now, you'll pay!!");
+            Debug.Log("Asteroid, destroyed!");
             Destroy(this.gameObject, 0.25f);
         }
     }
