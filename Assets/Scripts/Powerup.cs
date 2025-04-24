@@ -2,8 +2,11 @@
 
 public class Powerup : MonoBehaviour
 {
-    [SerializeField]private float _speed = 3.0f;
-    [SerializeField]private int _powerupID;
+    [SerializeField] private float _speed = 3.0f;
+    [SerializeField] private int _powerupID;
+    [SerializeField] private GameObject _slimeMessPrefab;
+    [SerializeField] private float _slimeSlowAmount = 2.0f;
+    [SerializeField] private float _slimeDuration = 5.0f;
     //0 = Triple Shot 1 = Speed 2 = Shields
 
     private string[] _tripleShotText =
@@ -81,7 +84,15 @@ public class Powerup : MonoBehaviour
                     player.ActivateChainLightning();// Activates the chain lightning ability on the player for a limited time
                     Debug.Log("⚡BOLT STORM ONLINE!");// Debug message for confirmation
                     break;
-                    default:
+                case 6:
+                    AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f); // Slime splat sound
+                    // Instantiate slime mess splat at the player's position
+                    GameObject slimeMess = Instantiate(_slimeMessPrefab, other.transform.position, Quaternion.identity);
+                    slimeMess.transform.SetParent(other.transform);// Stick it to the player
+                    player.ApplySlimeDebuff(_slimeSlowAmount, _slimeDuration, slimeMess);
+                    Debug.Log("Slimed! Movement Slowed.");
+                    break;
+                default:
                         Debug.Log("Default Value");
                         break;
                 }

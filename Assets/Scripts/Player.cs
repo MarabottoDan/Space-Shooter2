@@ -22,7 +22,9 @@ public class Player : MonoBehaviour
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
-    
+    private bool _isSlowed = false; // Tracks whether slime debuff is active
+
+
     private float _canFire = -1f;
     private float _addLife = 1f;//Adds 1 live to the player
     private int _maxLives = 3;
@@ -174,6 +176,10 @@ public class Player : MonoBehaviour
     void ThrusterSpeed()
 
     {
+        if (_isSlowed)
+        {
+            return;//Don't override Slimedebuff while it's active
+        }
            
          if (Input.GetKey(KeyCode.LeftShift) && !_isSpeedBoostActive && _uiManager.Thrusters_Bar_Fill)
         //This checks if the Left Shift key is pressed, whether the speed boost is already active, and whether there is fuel left in the thruster bar
@@ -185,6 +191,30 @@ public class Player : MonoBehaviour
              _speed = 5.6f;
          }
         
+    }
+
+    public void ApplySlimeDebuff(float slowAmount, float duration, GameObject slimeMess)
+    {
+        // Start a coroutine to handle the slowdown and timed recovery
+        StartCoroutine(SlimeDebuffRoutine(slowAmount, duration, slimeMess));
+    }
+
+    private IEnumerator SlimeDebuffRoutine(float slowAmount, float duration, GameObject slimeMess)
+    {
+        _isSlowed = true;// Flag to prevent ThrusterSpeed from overriding
+        _speed -= slowAmount;
+        Debug.Log("Speed reduced by slime!");
+
+        yield return new WaitForSeconds(duration);
+
+        _speed += slowAmount;
+        _isSlowed = false; // Reset the flag after debuff ends
+        Debug.Log("Speed restored.");
+
+        if (slimeMess != null)
+        {
+            Destroy(slimeMess);// Remove the visual after effect ends
+        }
     }
 
     void UpdateAmmoUI()

@@ -11,9 +11,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _restartText;
     private GameManager _gameManager;
+
+    // Reference to the UI Text that displays the current wave number (e.g., "Wave: 3")
     [SerializeField] private TextMeshProUGUI _waveCounterText;
     [SerializeField] private TextMeshProUGUI _countdownText;
-   
+    // Reference to the UI Text that shows the countdown between waves (e.g., "Next wave in: 5...")
+
 
 
 
@@ -130,20 +133,20 @@ public class UIManager : MonoBehaviour
         fillImage.fillAmount = _currentFill; //Updates the fillImage of the fillAmount of the Thruster based on the _currentFill
     }
 
-    public void UpdateWaveText( int wave)
+    public void UpdateWaveText( int wave)// Updates the wave counter UI with the current wave number
     {
-        _waveCounterText.text = "Wave: " + wave;
+        _waveCounterText.text = "Wave: " + wave; // Set the text to display the wave number
     }
 
-    public IEnumerator ShowWaveCountDown (int seconds)
+    public IEnumerator ShowWaveCountDown (int seconds)// Displays a countdown message before the next wave starts
     {
-        _countdownText.gameObject.SetActive(true);
-        for (int i= seconds; i> 0; i--)
+        _countdownText.gameObject.SetActive(true);// Show the countdown text
+        for (int i= seconds; i> 0; i--)// Count down from the given number to 1
         {
-            _countdownText.text = "Next wave in: " + i + "...";
-            yield return new WaitForSeconds(1f);
+            _countdownText.text = "Next wave in: " + i + "..."; // Update countdown text each second
+            yield return new WaitForSeconds(1f); // Wait one second before updating again
         }
 
-        _countdownText.gameObject.SetActive(false);
+        _countdownText.gameObject.SetActive(false); // Hide the countdown text after countdown ends
     }
 }

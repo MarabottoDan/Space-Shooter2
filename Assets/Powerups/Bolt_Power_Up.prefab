@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1842469845
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5eb415dd265e44ed399ae7f4620c63ab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -165,4 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 5
+  _slimeMessPrefab: {fileID: 0}
+  _slimeSlowAmount: 2
+  _slimeDuration: 5
   _clip: {fileID: 8300000, guid: 1e514f06cc44543e7b5f2a86ae85909b, type: 3}
