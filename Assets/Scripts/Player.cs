@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
     private bool _isTripleShotActive = false;
+
     private bool _isSlowed = false; // Tracks whether slime debuff is active
 
 

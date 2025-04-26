@@ -6,6 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField]private GameObject _enemyprefab;
     [SerializeField] private GameObject _horizontalEnemyPrefab;
+    [SerializeField] private GameObject _whiteEnemyPrefab;
     [SerializeField]private GameObject _enemyContainer;
     [SerializeField]private GameObject[] _powerups;
    
@@ -46,6 +47,12 @@ public class SpawnManager : MonoBehaviour
 
                 yield return new WaitForSeconds(0.5f);// Small delay between spawns
             }
+            // Spawn 1 WhiteEnemy per wave
+            Vector3 whiteEnemyPos = new Vector3(0, 12f, 0); // It'll decide L or R in its own Start()
+            GameObject whiteEnemy = Instantiate(_whiteEnemyPrefab, whiteEnemyPos, Quaternion.identity);
+            whiteEnemy.transform.parent = _enemyContainer.transform;
+
+            yield return new WaitForSeconds(0.5f); // Optional delay
 
             for (int i =0; i < horizontalEnemies; i ++)// Spawn horizontal enemies in random range location
             {
