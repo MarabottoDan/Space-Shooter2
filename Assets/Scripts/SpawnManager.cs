@@ -8,13 +8,15 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _horizontalEnemyPrefab;
     [SerializeField] private GameObject _whiteEnemyPrefab;
     [SerializeField]private GameObject _enemyContainer;
+
+    [Header("Powerups")]
     [SerializeField]private GameObject[] _powerups;
    
 
     [Header("Wave system")]
     [SerializeField] private int _startRegularEnemyCount = 3;// Number of regular enemies to spawn in the first wave
     [SerializeField] private int _startHorizontalEnemyCount = 1;// Number of horizontal enemies to spawn in the first wave
-    [SerializeField] private float _timeBetweenWaves = 5f;// Delay (in seconds) between waves
+   
     [SerializeField] private UIManager _uiManager;// Reference to the UIManager script to update wave UI and countdown
 
     private int _currentWave = 1; // Tracks the current wave number
@@ -50,6 +52,7 @@ public class SpawnManager : MonoBehaviour
             // Spawn 1 WhiteEnemy per wave
             Vector3 whiteEnemyPos = new Vector3(0, 12f, 0); // It'll decide L or R in its own Start()
             GameObject whiteEnemy = Instantiate(_whiteEnemyPrefab, whiteEnemyPos, Quaternion.identity);
+            // Set the WhiteEnemy's parent to the EnemyContainer to keep the Hierarchy organized
             whiteEnemy.transform.parent = _enemyContainer.transform;
 
             yield return new WaitForSeconds(0.5f); // Optional delay
@@ -81,29 +84,38 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerupRoutine()
     {
         yield return new WaitForSeconds(3.0f);// Wait 3 seconds before starting to spawn power-ups
-        while (_stopSpawning == false)// Continue spawning as long as the player is alive
+
+       while(!_stopSpawning)
         {
             Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
-            // Choose a random X position within screen bounds, Y = 12 to spawn from the top
-            int randomPowerUP = Random.Range(0, 7);// Randomly select one of the 6 power-ups
 
-            if (randomPowerUP == 5)// Check if the selected power-up is the Bolt Power-Up
+            float roll = Random.Range(0f, 1f);
+            Powerup.Rarity selectedRarity;
+
+            if(roll <= 0.6f)
             {
-                float _rarityRoll = Random.Range(0f, 1f);// Generate a float between 0 and 1
+                selectedRarity = Powerup.Rarity.Common; //60%
+            }
 
-                if (_rarityRoll <= 0.50f)// Only spawn Bolt Power-Up 15% of the time
-                {
-                    Instantiate(_powerups[randomPowerUP], posToSpawn, Quaternion.identity);
-                    // Spawn rare Bolt Power-Up
-                }
+            else if (roll <=0.9f)
+            {
+                selectedRarity = Powerup.Rarity.Uncommon; //30%
             }
+
             else
-            { 
-            Instantiate(_powerups[randomPowerUP], posToSpawn, Quaternion.identity);
-                // Spawn all other power-ups with normal chance
+            {
+                selectedRarity = Powerup.Rarity.Rare; //10%
             }
+
+            GameObject[] matchingPowerups = System.Array.FindAll(_powerups, p => p.GetComponent<Powerup>().GetRarity() == selectedRarity);
+
+            if (matchingPowerups.Length >0)
+            {
+                int randomIndex = Random.Range(0, matchingPowerups.Length);
+                Instantiate(matchingPowerups[randomIndex], posToSpawn, Quaternion.identity);
+            }
+
             yield return new WaitForSeconds(Random.Range(5, 10));
-            // Wait a random amount of time before spawning the next power-up (between 5–10 seconds)
         }
     }
 

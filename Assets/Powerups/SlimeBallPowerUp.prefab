@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 6
+  _rarity: 1
   _slimeMessPrefab: {fileID: 7617703907745377943, guid: c5c93c87dcedf4016b99d91e7f196ed4,
     type: 3}
   _slimeSlowAmount: 2

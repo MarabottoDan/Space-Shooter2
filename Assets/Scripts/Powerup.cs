@@ -2,12 +2,20 @@
 
 public class Powerup : MonoBehaviour
 {
+
+    public enum Rarity
+    {
+        Common,
+        Uncommon,
+        Rare
+    }
     [SerializeField] private float _speed = 3.0f;
     [SerializeField] private int _powerupID;
+    [SerializeField] private Rarity _rarity = Rarity.Common;
     [SerializeField] private GameObject _slimeMessPrefab;
     [SerializeField] private float _slimeSlowAmount = 2.0f;
     [SerializeField] private float _slimeDuration = 5.0f;
-
+    [SerializeField] private AudioClip _clip;
     private AudioSource _audioSource;
     //0 = Triple Shot 1 = Speed 2 = Shields
 
@@ -18,7 +26,7 @@ public class Powerup : MonoBehaviour
         "Time to light you up!"
    };
 
-    [SerializeField] private AudioClip _clip; 
+   
 
     // Start is called before the first frame update
     void Start()
@@ -53,40 +61,45 @@ public class Powerup : MonoBehaviour
                         Debug.Log(_tripleShotText[randomIndex]);
                         Destroy(this.gameObject);
                     break;
+
                     case 1:
                         AudioSource.PlayClipAtPoint(_clip, transform.position);
                         player.SpeedBoostActive();
                         Debug.Log("I’m faster than my Wi-Fi!");
-                    Destroy(this.gameObject);
+                        Destroy(this.gameObject);
                     break;
+
                     case 2:
                         AudioSource.PlayClipAtPoint(_clip, transform.position);
                         player.ShieldsActive();
-                    Destroy(this.gameObject);
+                        Destroy(this.gameObject);
                     break;
+
                     case 3:
                         AudioSource.PlayClipAtPoint(_clip, transform.position, 1.5f);
                         player.AddAmmo(10);//Adds 10 ammo 
                         player.UpdateUIAmmo();// Update the UI to reflect new ammo count
                         Debug.Log("Ammo Loaded");
-                    Destroy(this.gameObject);
+                        Destroy(this.gameObject);
                     break;
+
                     case 4:
                         if (player.GetCurrentLives() < player.GetMaxLives())// Check if the player currently has fewer than the maximum allowed lives
                     {
-                            AudioSource.PlayClipAtPoint(_clip, transform.position);// Play the health pickup audio clip
-                            player.AddLife();// Add one life to the player and update relevant visuals (like engine fire and UI)
+                        AudioSource.PlayClipAtPoint(_clip, transform.position);// Play the health pickup audio clip
+                        player.AddLife();// Add one life to the player and update relevant visuals (like engine fire and UI)
                         Debug.Log("Life Added");
                         
                     }
                         else
                         {
                         // If the player already has max lives, play a different audio
-                            player.PlayNoMoreLivesForYouClip();
-                            Debug.Log("Max lives already, No more lives for you");
+                         player.PlayNoMoreLivesForYouClip();
+                         Debug.Log("Max lives already, No more lives for you");
                         }
-                    Destroy(this.gameObject);
+                         Destroy(this.gameObject);
                     break;
+
                     case 5:
          
                     _audioSource.PlayOneShot(_clip);
@@ -101,6 +114,7 @@ public class Powerup : MonoBehaviour
 
                     Destroy(this.gameObject, _clip.length);
                     break;
+
                     case 6:
                     AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f); // Slime splat sound
 
@@ -130,6 +144,11 @@ public class Powerup : MonoBehaviour
                 }
             
         }
-    }  
+    }
+
+    public Rarity GetRarity()
+    {
+     return _rarity;
+    }
 }
 

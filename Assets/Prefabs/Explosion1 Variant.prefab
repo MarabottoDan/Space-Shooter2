@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c09b473e10dd4c0eb03897a8f9747bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionDuration: 5
+  explosionDuration: 2
 --- !u!1001 &1982373572328720551
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -136,6 +136,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _powerupID: 0
+  _rarity: 1
+  _slimeMessPrefab: {fileID: 0}
+  _slimeSlowAmount: 2
+  _slimeDuration: 5
   _clip: {fileID: 8300000, guid: 2a191de0f4dee41c595844693bcddfe0, type: 3}
 --- !u!95 &47411828
 Animator:
