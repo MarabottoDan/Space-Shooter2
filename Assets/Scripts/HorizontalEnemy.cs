@@ -64,7 +64,7 @@ public class HorizontalEnemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)// Detects collision with other objects
     {
         Debug.Log("HorizontalEnemy HIT" + other.name);
-        if (other.CompareTag("Laser"))// If hit by a laser, take damage
+        if (other.CompareTag("PlayerLaser"))// If hit by a laser, take damage
         {
             Destroy(other.gameObject);// Destroy the laser
             Damage();// Apply damage logic

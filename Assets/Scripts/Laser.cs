@@ -6,6 +6,8 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float _speed = 8.0f;
     private bool _isEnemyLaser = false;
+    private bool _hasHit = false; // Prevents double hit
+
 
     void Update()
     {
@@ -56,6 +58,8 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (_hasHit) return;
+
      if (other.tag == "Player" && _isEnemyLaser == true)
         {
             Player player = other.GetComponent<Player>();
@@ -64,7 +68,33 @@ public class Laser : MonoBehaviour
             {
                 player.Damage();
             }
+
+            _hasHit = true;
+            Destroy(this.gameObject);
         }
+
+     else if(other.CompareTag("Enemy") && _isEnemyLaser == false)
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                enemy.OnDeath();
+            }
+
+            _hasHit = true;
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void MarkAsHit()
+    {
+        _hasHit = true;
+    }
+
+    public bool HasHit()
+    {
+        return _hasHit;
     }
 
 }

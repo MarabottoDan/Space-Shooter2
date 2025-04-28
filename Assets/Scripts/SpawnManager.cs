@@ -85,36 +85,42 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);// Wait 3 seconds before starting to spawn power-ups
 
-       while(!_stopSpawning)
+       while(!_stopSpawning)// Keep spawning while the player is alive
         {
+            // Choose a random X position at the top of the screen
             Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
 
+            // Roll a random number between 0 and 1 to decide which rarity will spawn
             float roll = Random.Range(0f, 1f);
             Powerup.Rarity selectedRarity;
 
             if(roll <= 0.6f)
             {
-                selectedRarity = Powerup.Rarity.Common; //60%
+                selectedRarity = Powerup.Rarity.Common; // 60% chance to spawn a Common powerup
             }
 
             else if (roll <=0.9f)
             {
-                selectedRarity = Powerup.Rarity.Uncommon; //30%
+                selectedRarity = Powerup.Rarity.Uncommon; // 30% chance to spawn an Uncommon powerup
             }
 
             else
             {
-                selectedRarity = Powerup.Rarity.Rare; //10%
+                selectedRarity = Powerup.Rarity.Rare; // 10% chance to spawn a Rare powerup
             }
 
+            // Find all powerups in the array that match the selected rarity
             GameObject[] matchingPowerups = System.Array.FindAll(_powerups, p => p.GetComponent<Powerup>().GetRarity() == selectedRarity);
 
             if (matchingPowerups.Length >0)
             {
+                // Pick a random matching powerup from the list
                 int randomIndex = Random.Range(0, matchingPowerups.Length);
+
+                // Spawn the selected powerup at the chosen position
                 Instantiate(matchingPowerups[randomIndex], posToSpawn, Quaternion.identity);
             }
-
+            // Wait a random time (between 5 to 10 seconds) before spawning the next powerup
             yield return new WaitForSeconds(Random.Range(5, 10));
         }
     }

@@ -11,8 +11,10 @@ public class Player : MonoBehaviour
     private float _speedMultiplier = 2;
     [SerializeField] float _shiftSpeed = 10f;
     private bool _isSpeedBoostActive = false;
-    [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _laserPlayerPrefab;
+   
     [SerializeField] private GameObject _tripleShotPrefab;
+
 
     [Header("Chain Lightning")]
     [SerializeField] private GameObject _chainLightningShotPrefab;// Reference to the bolt projectile prefab (assign in Inspector)
@@ -24,6 +26,8 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
 
     private bool _isSlowed = false; // Tracks whether slime debuff is active
+    private bool _isDamaged = false; // To prevent multiple damage hits at once
+
 
 
     private float _canFire = -1f;
@@ -241,7 +245,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+            Instantiate(_laserPlayerPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
         }
 
         _audioSource.Play();
@@ -271,6 +275,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isDamaged == true)
+        {
+            return; //Already damaged recently, ignore extra hits
+        }
+
+        _isDamaged = true; // Mark as damaged
+
         _cameraShake.StartCoroutine(_cameraShake.Shake(1f, 0.5f));
         // Trigger a short, subtle camera shake when the player takes damage
 
@@ -281,12 +292,12 @@ public class Player : MonoBehaviour
             if (_shieldHits == 2)
             {
                 SetShieldColor(Color.green); 
-                return; 
+                
             }
             else if (_shieldHits == 1)
             {
                 SetShieldColor(Color.red); 
-                return; 
+                
             }
             else if (_shieldHits <= 0)
             {
@@ -294,10 +305,12 @@ public class Player : MonoBehaviour
                 _isShieldsActive = false; 
                 _shieldVisualizer.SetActive(false); 
                 Debug.Log("Shields down! Panic mode engaged!"); 
-                return; 
+              
             }
-            
-         }
+
+            StartCoroutine(DamageCooldown());
+            return;
+        }
             _lives -= 1;
         //_lives = _lives -1;// _lives--;
 
@@ -344,6 +357,8 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
             Debug.Log("I'm space dust now :(");
         }
+
+        StartCoroutine(DamageCooldown());
     }
 
     // Method to add a life to the player. Returns true if a life was added, false otherwise.
@@ -457,7 +472,13 @@ public class Player : MonoBehaviour
         Debug.Log("Points..I need more POOOOIIIINTSSS!");
         _uiManager.UpdateScore(_score);
     }
-    
+
+    IEnumerator DamageCooldown()
+    {
+        yield return new WaitForSeconds(0.2f); // Tiny invincibility window
+        _isDamaged = false; // Allow taking damage again after cooldown
+    }
+
 
 
 }
