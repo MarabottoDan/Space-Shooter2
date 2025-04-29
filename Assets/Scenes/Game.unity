@@ -1166,7 +1166,7 @@ MonoBehaviour:
   _maxAmmo: 15
   _currentAmmo: 0
   _ammoText: {fileID: 1541706635}
-  _isShieldsActive: 0
+  _isShieldsActive: 1
   _shieldVisualizer: {fileID: 1640295640}
   _shieldVisualizer1: {fileID: 604364296}
   _shieldVisualizer2: {fileID: 125279672}
@@ -1238,7 +1238,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854512508}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: -9, z: 0}
+  m_LocalPosition: {x: -5, y: 1, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1567274926}
@@ -1856,6 +1856,9 @@ MonoBehaviour:
   - {fileID: 5381926996058696233, guid: b4feb17a945c34d819372e7313efcdaf, type: 3}
   - {fileID: 7286964707163313943, guid: 1c7428e67b1cf45f7bcc9bc67acd999a, type: 3}
   - {fileID: 4360670391044023798, guid: 78972733507f64c248f58ec576d9a318, type: 3}
+  _smartEnemyPrefab: {fileID: 105461855958612930, guid: 29b655ffb13344f27b21c490cb4df9a4,
+    type: 3}
+  _smartEnemySpawnChance: 0.2
   _startRegularEnemyCount: 3
   _startHorizontalEnemyCount: 1
   _uiManager: {fileID: 1497819660}
@@ -2832,6 +2835,11 @@ PrefabInstance:
     - target: {fileID: 4278767402680225336, guid: 86729431fa2c341cdab3eeb4bfe47c9f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466733530272836560, guid: 86729431fa2c341cdab3eeb4bfe47c9f,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

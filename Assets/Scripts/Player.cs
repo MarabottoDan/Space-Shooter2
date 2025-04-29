@@ -469,7 +469,7 @@ public class Player : MonoBehaviour
     public void AddScore(int points)
     {
         _score += points;
-        Debug.Log("Points..I need more POOOOIIIINTSSS!");
+        Debug.Log("Enemy destroyed!");
         _uiManager.UpdateScore(_score);
     }
 
@@ -479,6 +479,43 @@ public class Player : MonoBehaviour
         _isDamaged = false; // Allow taking damage again after cooldown
     }
 
+    public void LoseLife()
+    {
+        _lives--;
+        _uiManager.UpdateLives(_lives);
+
+        if(_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            _audioSource.Play();
+            Destroy(this.gameObject);
+            _cameraShake.StartCoroutine(_cameraShake.Shake(1f, 0.5f));
+        }
+    }
+
+    public void ApplyRandomPowerup()
+    {
+        int random = Random.Range(0, 3);// At least Triple Shot, Speed Boost, and Ammo refills.
+
+        switch (random)
+        {
+            case 0:
+                TripleShotActive();
+                Debug.Log("Random Powerup: Triple Shot!");
+                break;
+
+            case 1:
+                SpeedBoostActive();
+                Debug.Log("Random Powerup : SpeedBoost!");
+                break;
+
+            case 2:
+                AddAmmo(5);
+                UpdateAmmoUI();
+                Debug.Log("Random Powerup: Ammo Boost!");
+                break;
 
 
+        }
+    }
 }

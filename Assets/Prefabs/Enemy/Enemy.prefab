@@ -54,9 +54,9 @@ MonoBehaviour:
     type: 3}
   _enemyShield: {fileID: 6160322288980016158, guid: 4f6a7d2fce8f04459833d7c0487defdd,
     type: 3}
-  _aggressionDistance: 50
-  _aggressionSpeed: 35
-  _aggressionDuration: 20
+  _aggressionDistance: 5
+  _aggressionSpeed: 5
+  _aggressionDuration: 2
 --- !u!212 &4119131129914290786
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _aggressionSpeed = 5.5f; // Aggression speed
     [SerializeField] private float _aggressionDuration = 2f;// How long to chase
     private float _aggressionTimer; // InternalTimer
+
+    
 
 
 
@@ -195,6 +198,64 @@ public class Enemy : MonoBehaviour
 
         // Destroy the enemy GameObject after a short delay (for animation and sound to finish)
         Destroy(this.gameObject, 2.8f);
+    }
+
+    public void ApplyRandomMutation()
+    {
+        int random = Random.Range(0, 3);// picks a random buff
+
+        switch (random)
+        {
+            case 0:
+                // Increase movement speed
+                _verticalspeed *= 1.5f;
+                Debug.Log("Mutation: Speed Boost!");
+                StartCoroutine(ResetMutation());
+                break;
+
+            case 1:
+                // Fire lasers faster
+                _fireRate *= 0.5f; // Halve the fire rate to shoot more often
+                Debug.Log("Mutation: Rapid Fire!");
+                StartCoroutine(ResetMutation());
+                break;
+
+            case 2:
+                //Get temporary shield
+                if (_enemyShield != null)
+                {
+                    _enemyShield.SetActive(true);
+                    Debug.Log("Mutation: Temporary Shield activated!");
+                    StartCoroutine(ResetMutation());
+                }
+                break;
+        }
+    }
+
+    private IEnumerator ResetMutation()
+    {
+        yield return new WaitForSeconds(5f); // Mutation lasts for 5 seconds
+
+        //Reset speed and fire rate back to normal
+        _verticalspeed = 4.0f;
+        _fireRate = 3.0f;
+        if (_enemyShield != null)
+        {
+            // Optionally disable the shield if it was enabled by mutation
+            _enemyShield.SetActive(false);
+        }
+    }
+
+    private bool _isMutated = false;
+
+    public bool IsMutated()
+    {
+        return _isMutated;
+    }
+
+    public void MarkAsMutated()
+    {
+        _isMutated = true;
     }
 
 

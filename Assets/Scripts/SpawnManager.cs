@@ -11,6 +11,10 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Powerups")]
     [SerializeField]private GameObject[] _powerups;
+
+    [Header("SmartEnemy")]
+    [SerializeField] private GameObject _smartEnemyPrefab;
+    [SerializeField] private float _smartEnemySpawnChance = .2f;
    
 
     [Header("Wave system")]
@@ -44,8 +48,22 @@ public class SpawnManager : MonoBehaviour
             for (int i = 0; i < regularEnemies; i++) // Spawn regular enemies in random range location
             {
                 Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
-                GameObject newEnemy = Instantiate(_enemyprefab, posToSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _enemyContainer.transform;
+                //GameObject newEnemy = Instantiate(_enemyprefab, posToSpawn, Quaternion.identity);
+                //newEnemy.transform.parent = _enemyContainer.transform;
+
+                float roll = Random.Range(0f, 1f);
+
+                if (roll <= _smartEnemySpawnChance)
+                {
+                    GameObject smartEnemy = Instantiate(_smartEnemyPrefab, posToSpawn, _smartEnemyPrefab.transform.rotation);
+
+                    smartEnemy.transform.parent = _enemyContainer.transform;
+                }
+                else
+                {
+                    GameObject newEmemy = Instantiate(_enemyprefab, posToSpawn, Quaternion.identity);
+                    newEmemy.transform.parent = _enemyContainer.transform;
+                }
 
                 yield return new WaitForSeconds(0.5f);// Small delay between spawns
             }
@@ -129,5 +147,7 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
+
+
 }
 
