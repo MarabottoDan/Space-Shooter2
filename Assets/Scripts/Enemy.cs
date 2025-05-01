@@ -12,9 +12,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _aggressionDuration = 2f;// How long to chase
     private float _aggressionTimer; // InternalTimer
 
-    
+    [Header("Pickup Destroyer")]
+    [SerializeField] private float _xSameAxis = 1f;
+    [SerializeField] private float _yDistance = 1f;
+    private bool _isPowerupShootDistance = true;
+    [SerializeField] private float _pickupFireRate = 1.5f;  // Delay between pickup shots
+    private float _nextPickupFireTime = 0f;                 // Internal timer
 
 
+
+    // if enemy is in same X as powerup
+    // if enemy is 1f Y from the powerup
+    // ignore _canfire
+    // shoot and destroy powerup
+    // Tag Pickup
 
     private Player _player;
     private Animator _anim;
@@ -73,6 +84,7 @@ public class Enemy : MonoBehaviour
         if (_isDead) return;
 
         CalculateMovement();
+        CheckForPickupAndFire();
 
         if(Time.time > _canFire)
         {
@@ -109,6 +121,55 @@ public class Enemy : MonoBehaviour
         {
             float randomX = Random.Range(-16.7f, 13.5f);
             transform.position = new Vector3(randomX, 16.5f, 0);
+        }
+    }
+
+    private void CheckForPickupAndFire()
+    {
+        //Exit Early is power up targeting is disabled
+        if (!_isPowerupShootDistance) return;
+
+        //Get all pickups in the scene
+        GameObject[] pickups = GameObject.FindGameObjectsWithTag("Pickup");
+
+        foreach (GameObject pickup in pickups)
+        {
+            if (pickup == null) continue;
+
+            Vector3 pickupPos = pickup.transform.position;
+            Vector3 enemyPos = transform.position;
+
+            //Check if pickup is aligned on X and slightly below Y
+            if (Mathf.Abs(pickupPos.x - enemyPos.x) <= _xSameAxis && enemyPos.y > pickupPos.y && (enemyPos.y - pickupPos.y) <= _yDistance)
+            {
+                //Fire once at the pickup
+                if (Time.time > _nextPickupFireTime)
+                {
+                    _nextPickupFireTime = Time.time + _pickupFireRate;// Reset cooldown
+                    GameObject enemyLaser = Instantiate(_laserEnemyPrefab, enemyPos, Quaternion.identity);
+
+
+                    if (_laserEnemyContainer == null)
+                    {
+                        _laserEnemyContainer = GameObject.Find("LaserEnemyContainer");
+                    }
+
+                    if (_laserEnemyContainer != null)
+                    {
+                        enemyLaser.transform.parent = _laserEnemyContainer.transform;
+                    }
+
+                    //Mark the laser as enemy laser
+                    Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+                    foreach (Laser laser in lasers)
+                    {
+                        laser.AssignEnemyLaser();
+                    }
+
+                    //Only shoot once per frame, at the first valid pickup
+                    break;
+                }
+            }
         }
     }
 

@@ -7,6 +7,18 @@ public class Laser : MonoBehaviour
     private float _speed = 8.0f;
     private bool _isEnemyLaser = false;
     private bool _hasHit = false; // Prevents double hit
+    [SerializeField] private float _pickupHitRange = 2f;
+    private Vector3 _startPosition;
+
+
+    private void Start()
+    {
+ 
+     _startPosition = transform.position;
+    
+
+    }
+
 
 
     void Update()
@@ -85,6 +97,20 @@ public class Laser : MonoBehaviour
             _hasHit = true;
             Destroy(this.gameObject);
         }
+        else if (other.CompareTag("Pickup") && _isEnemyLaser)
+        {
+            float distanceToPickup = Vector3.Distance(_startPosition, other.transform.position);
+
+
+            if (distanceToPickup <= _pickupHitRange)
+            {
+                Destroy(other.gameObject); // Only destroy if close enough
+            }
+
+            _hasHit = true;
+            Destroy(this.gameObject);
+        }
+
     }
 
     public void MarkAsHit()
