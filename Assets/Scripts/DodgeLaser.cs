@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Laser : MonoBehaviour
+public class DodgeLaser : MonoBehaviour
 {
-    
+
     [SerializeField]
     private float _speed = 8.0f;
     private bool _isEnemyLaser = false;
@@ -17,7 +17,7 @@ public class Laser : MonoBehaviour
         // Record the initial position of the laser when it spawns
         // This will later be used to calculate the distance to a pickup
         _startPosition = transform.position;
-    
+
 
     }
 
@@ -37,7 +37,7 @@ public class Laser : MonoBehaviour
 
     void MoveUp()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
+        transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
         if (transform.position.y > 17f)
         {
@@ -72,10 +72,9 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Laser hit: " + other.name);
         if (_hasHit) return;
 
-     if (other.tag == "Player" && _isEnemyLaser == true)
+        if (other.tag == "Player" && _isEnemyLaser == true)
         {
             Player player = other.GetComponent<Player>();
 
@@ -88,7 +87,7 @@ public class Laser : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-     else if(other.CompareTag("Enemy") && _isEnemyLaser == false)
+        else if (other.CompareTag("Enemy") && _isEnemyLaser == false)
         {
             Enemy enemy = other.GetComponent<Enemy>();
 
@@ -116,7 +115,9 @@ public class Laser : MonoBehaviour
             Destroy(this.gameObject); // Destroy the laser itself, whether or not it destroyed the pickup
         }
 
+
     }
+
 
     public void MarkAsHit()
     {

@@ -59,6 +59,7 @@ MonoBehaviour:
   _aggressionDuration: 2
   _xSameAxis: 1
   _yDistance: 5
+  _pickupFireRate: 1.5
 --- !u!212 &4119131129914290786
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -8,6 +8,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _horizontalEnemyPrefab;
     [SerializeField] private GameObject _whiteEnemyPrefab;
     [SerializeField]private GameObject _enemyContainer;
+    [SerializeField] private GameObject _dodgeEnemyPrefab;
+    [SerializeField] private float _dodgeEnemySpawnChance = 0.2f; // 20% chance instead of regular enemy
+
 
     [Header("Powerups")]
     [SerializeField]private GameObject[] _powerups;
@@ -58,6 +61,11 @@ public class SpawnManager : MonoBehaviour
                     GameObject smartEnemy = Instantiate(_smartEnemyPrefab, posToSpawn, _smartEnemyPrefab.transform.rotation);
 
                     smartEnemy.transform.parent = _enemyContainer.transform;
+                }
+                else if (roll <= _smartEnemySpawnChance + _dodgeEnemySpawnChance)
+                {
+                    GameObject dodgeEnemy = Instantiate(_dodgeEnemyPrefab, posToSpawn, Quaternion.identity);
+                    dodgeEnemy.transform.parent = _enemyContainer.transform;
                 }
                 else
                 {

@@ -13,11 +13,23 @@ public class Enemy : MonoBehaviour
     private float _aggressionTimer; // InternalTimer
 
     [Header("Pickup Destroyer")]
+    // Defines how closely the pickup must match the enemy’s X position (horizontal alignment)
     [SerializeField] private float _xSameAxis = 1f;
+    
+    // Defines how far below the enemy the pickup can be to trigger a shot
     [SerializeField] private float _yDistance = 1f;
+
+    // Master toggle to enable or disable the powerup-shooting behavior
+    // Set to true to activate enemy shooting at pickups
     private bool _isPowerupShootDistance = true;
-    [SerializeField] private float _pickupFireRate = 1.5f;  // Delay between pickup shots
-    private float _nextPickupFireTime = 0f;                 // Internal timer
+
+    // The minimum time (in seconds) between pickup shots for this enemy
+    // Helps prevent the enemy from firing too frequently at the same pickup
+    [SerializeField] private float _pickupFireRate = 1.5f;
+
+    // Internal timer used to track when the enemy can next shoot at a pickup
+    // Compared against Time.time to enforce the cooldown defined above
+    private float _nextPickupFireTime = 0f;                
 
 
 
@@ -41,6 +53,15 @@ public class Enemy : MonoBehaviour
         _aggressionTimer = _aggressionDuration;
         _isAggressive = Random.value < 0.4f;// 40% chance to become aggresive
         _player = GameObject.Find("Player").GetComponent<Player>();
+        if (_player == null)
+        {
+            Debug.LogError("Enemy.cs: Player reference is NULL");
+        }
+        else
+        {
+            Debug.Log("Enemy.cs: Player reference is OK");
+        }
+
         _audioSource = GetComponent<AudioSource>();
         _anim = GetComponent<Animator>();
         _laserEnemyContainer = GameObject.Find("LaserEnemyContainer");
@@ -124,49 +145,53 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    
     private void CheckForPickupAndFire()
+    // This method checks if any "Pickup" is close enough for the enemy to shoot at it.
+    // It only fires once per valid target, with a cooldown to avoid spamming.
     {
-        //Exit Early is power up targeting is disabled
+        // Exit early if powerup shooting behavior is disabled (controlled from Inspector)
         if (!_isPowerupShootDistance) return;
 
-        //Get all pickups in the scene
+        // Get all GameObjects in the scene that are tagged as "Pickup"
         GameObject[] pickups = GameObject.FindGameObjectsWithTag("Pickup");
-
+        // Loop through each pickup found in the scene
         foreach (GameObject pickup in pickups)
-        {
+        {    // Safety check: skip this pickup if it's missing or null (may have been destroyed)
             if (pickup == null) continue;
-
+            // Cache the positions of the pickup and the enemy for easier reading
             Vector3 pickupPos = pickup.transform.position;
             Vector3 enemyPos = transform.position;
-
-            //Check if pickup is aligned on X and slightly below Y
+            // Check if:
+            // 1. The pickup is close to the enemy on the X axis (horizontal alignment)
+            // 2. The pickup is below the enemy (enemy must shoot downward)
+            // 3. The pickup is not too far below (within a vertical range)
             if (Mathf.Abs(pickupPos.x - enemyPos.x) <= _xSameAxis && enemyPos.y > pickupPos.y && (enemyPos.y - pickupPos.y) <= _yDistance)
             {
                 //Fire once at the pickup
                 if (Time.time > _nextPickupFireTime)
-                {
-                    _nextPickupFireTime = Time.time + _pickupFireRate;// Reset cooldown
+                {   // Reset the cooldown timer to current time + fire delay
+                    _nextPickupFireTime = Time.time + _pickupFireRate;
                     GameObject enemyLaser = Instantiate(_laserEnemyPrefab, enemyPos, Quaternion.identity);
 
-
+                    // If the container for lasers hasn't been found yet, try to find it in the scene
                     if (_laserEnemyContainer == null)
                     {
                         _laserEnemyContainer = GameObject.Find("LaserEnemyContainer");
                     }
-
+                    // If the laser container exists, parent the new laser to it in the hierarchy
                     if (_laserEnemyContainer != null)
                     {
                         enemyLaser.transform.parent = _laserEnemyContainer.transform;
                     }
-
                     //Mark the laser as enemy laser
                     Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
                     foreach (Laser laser in lasers)
                     {
                         laser.AssignEnemyLaser();
                     }
-
-                    //Only shoot once per frame, at the first valid pickup
+                    // Stop checking after firing at the first valid pickup in range
+                    // (prevents firing at multiple pickups in a single frame)
                     break;
                 }
             }
@@ -220,18 +245,21 @@ public class Enemy : MonoBehaviour
         else if (other.CompareTag("PlayerLaser"))
         {
             Laser laser = other.GetComponent<Laser>();
-
-            if (laser != null && laser.HasHit() == false) // 🔵 Only allow fresh lasers
+            if (laser != null)
             {
-                Destroy(other.gameObject);
-
-                if (_player != null)
-                {
-                    _player.AddScore(10);
-                }
-                OnDeath();
+                laser.MarkAsHit(); // mark the laser as used
             }
+
+            Destroy(other.gameObject);
+
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
+
+            OnDeath();
         }
+
     }
 
 

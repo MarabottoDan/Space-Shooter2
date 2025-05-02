@@ -28,8 +28,18 @@ public class Player : MonoBehaviour
     private bool _isSlowed = false; // Tracks whether slime debuff is active
     private bool _isDamaged = false; // To prevent multiple damage hits at once
 
+    [Header("PickupMagnetBehavior")]
+    [SerializeField] private float _pickupPullSpeed = 10f;
+    [SerializeField] private float _pickPullRadius = 5f;
+    [SerializeField] private float _pullDuration = 3f;
+    [SerializeField] private float _pullCooldown = 50f;
 
+    [SerializeField] private Image _magnetBar; //assign the magnet bar image here
+    [SerializeField] private GameObject _magneticWavesPrefab; //MagneticWavesPrefab here
 
+    private bool _isPullingPickups = false;
+    private bool _canPull = true;
+ 
     private float _canFire = -1f;
     private float _addLife = 1f;//Adds 1 live to the player
     private int _maxLives = 3;
@@ -130,7 +140,73 @@ public class Player : MonoBehaviour
                 FireLaser();
             }     
         }
+
+        if (Input.GetKeyDown(KeyCode.C) && _canPull)
+        {
+            StartCoroutine(PullRoutine());// This will be called...
+        }
+
+        if (_isPullingPickups)
+        {
+            PullPickups();//We'll define this function next.
+        }
       
+    }
+
+    private IEnumerator PullRoutine()
+    {
+        _isPullingPickups = true;
+        _canPull = false;
+
+        
+        _magneticWavesPrefab.SetActive(true);//Turn on visual effects  
+        _magnetBar.fillAmount = 1f;//Start with the full magnet image
+
+        float timer = _pullDuration;
+
+        // DRAIN BAR DURING PULL
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            _magnetBar.fillAmount = timer / _pullDuration;//Drain the bar over time
+            yield return null;
+        }
+
+        //End pull mode
+        _isPullingPickups = false;
+        _magneticWavesPrefab.SetActive(false);
+        _magnetBar.fillAmount = 0f;
+
+        // REFILL BAR DURING COOLDOWN
+        float cooldownTimer = _pullCooldown;
+        while (cooldownTimer > 0f)
+        {
+            cooldownTimer -= Time.deltaTime;
+            _magnetBar.fillAmount = 1f - (cooldownTimer / _pullCooldown);
+            yield return null;
+        }
+        
+        _canPull = true;
+    }
+    // This method finds nearby pickups and pulls them toward the player while the magnet is active
+    private void PullPickups()
+    {   // Find all GameObjects in the scene tagged as "Pickup"
+        GameObject[] pickups = GameObject.FindGameObjectsWithTag("Pickup");
+
+        foreach (GameObject pickup in pickups)// Loop through each pickup
+        {
+            // Calculate the distance between the player and the pickup
+            float distance = Vector3.Distance(transform.position, pickup.transform.position);
+
+            // If the pickup is within the defined pull radius
+            if (distance <= _pickPullRadius)
+            {
+                // Calculate the direction from the pickup to the player
+                Vector3 direction = (transform.position - pickup.transform.position).normalized;
+                // Move the pickup toward the player at the defined speed
+                pickup.transform.position += direction * _pickupPullSpeed * Time.deltaTime;
+            }
+        }
     }
 
     public void ActivateChainLightning()
@@ -518,4 +594,6 @@ public class Player : MonoBehaviour
 
         }
     }
+
+    
 }
