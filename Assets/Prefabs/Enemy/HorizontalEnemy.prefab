@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1969606669581526931}
   m_Layer: 0
   m_Name: HorizontalEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,10 +150,8 @@ MonoBehaviour:
     type: 3}
   _explosionPrefab: {fileID: 4246416414590903002, guid: 7445dec641a3f4d49a61829513bb5165,
     type: 3}
-  _fireRate: 6
-  _laserSpeed: 5
-  _anim: {fileID: 0}
   _audioSource: {fileID: 1969606669581526931}
+  _fireRate: 6
 --- !u!95 &9116748528071370489
 Animator:
   serializedVersion: 3

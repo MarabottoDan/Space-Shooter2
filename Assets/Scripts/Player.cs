@@ -15,6 +15,11 @@ public class Player : MonoBehaviour
    
     [SerializeField] private GameObject _tripleShotPrefab;
 
+    [Header("Homing Missile")]
+    [SerializeField] private GameObject _homingMissilePrefab;
+    [SerializeField] private Transform _missileSpawnPoint;
+    
+
 
     [Header("Chain Lightning")]
     [SerializeField] private GameObject _chainLightningShotPrefab;// Reference to the bolt projectile prefab (assign in Inspector)
@@ -207,6 +212,28 @@ public class Player : MonoBehaviour
                 pickup.transform.position += direction * _pickupPullSpeed * Time.deltaTime;
             }
         }
+    }
+
+    public void ActivateHomingMissiles()
+    {
+        
+        StartCoroutine(HomingMissileRoutine());// Fire every 2 seconds
+    }
+
+    private IEnumerator HomingMissileRoutine()
+    {
+        float duration = 5f;
+        float fireRate = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            Instantiate(_homingMissilePrefab, _missileSpawnPoint.position, Quaternion.identity);
+            yield return new WaitForSeconds(fireRate);
+            elapsed += fireRate;
+        }
+
+       
     }
 
     public void ActivateChainLightning()

@@ -138,6 +138,21 @@ public class Powerup : MonoBehaviour
                     // Destroy the power-up after the audio finishes playing
                     Destroy(this.gameObject, _clip.length);
                     break;
+
+                case 7:
+                    AudioSource.PlayClipAtPoint(_clip, transform.position, 1.0f);
+                    player.ActivateHomingMissiles();
+                    Debug.Log("Homing Missiles Activated");
+
+                    foreach (SpriteRenderer sr in GetComponentsInChildren<SpriteRenderer>())
+                    {
+                        sr.enabled = false;
+                    }
+                    Collider2D homingCol = GetComponent<Collider2D>();
+                    if (homingCol != null) homingCol.enabled = false;
+
+                    Destroy(this.gameObject, _clip.length);
+                    break;
                    default:
                         Debug.Log("Default Value");
                         break;
