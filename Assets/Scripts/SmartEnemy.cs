@@ -107,25 +107,20 @@ public class SmartEnemy : MonoBehaviour
         {
             Laser laser = other.GetComponent<Laser>();
 
-            if (laser != null && laser.HasHit() == false)
+            if (laser != null && !laser.HasHit())
             {
-                Destroy(other.gameObject); // Destroy the laser
-                laser.MarkAsHit(); // Optional, if you want to prevent double hits
-                Damage(); // Take 1 damage
+                Destroy(other.gameObject);
+                laser.MarkAsHit();
+                Damage();
+            }
+            else if (laser == null)
+            {
+                // It's not a Laser component but still tagged correctly — destroy and apply damage
+                Destroy(other.gameObject);
+                Damage();
             }
         }
 
-        if (other.CompareTag("Player"))
-        {
-            Player player = other.GetComponent<Player>();
-
-            if (player != null)
-            {
-                player.Damage();
-            }
-
-            Damage(); // SmartEnemy takes damage if collides with player directly
-        }
     }
 
 
