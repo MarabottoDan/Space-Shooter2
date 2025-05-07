@@ -77,30 +77,29 @@ public class SmartEnemy : MonoBehaviour
 
     private void FireDNAshots()
     {
-        float startAngle = 180f;// 9 o'clock (left)
-        float endAngle = 0f; // 3 o'clock (right)
-        float angleStep = (endAngle - startAngle) / (_dnaShotCount - 1);
-
-        float angle = startAngle;
+        float startAngle = 180f; // Left
+        float endAngle = 0f;     // Right
+        float angleStep = (startAngle - endAngle) / (_dnaShotCount - 1);
 
         for (int i = 0; i < _dnaShotCount; i++)
         {
-            float dirX = Mathf.Cos(angle * Mathf.Deg2Rad);
-            float dirY = Mathf.Sin(angle * Mathf.Deg2Rad);
+            float angle = startAngle - i * angleStep;
+            float rad = angle * Mathf.Deg2Rad;
 
-            Vector2 moveDirection = new Vector2(dirX, dirY).normalized;
+            Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)).normalized;
 
-            GameObject dnaShot = Instantiate(_dnaShotPrefab, _backLaserSpawnPoint.position,Quaternion.Euler(0, 0, angle));
+            GameObject dnaShot = Instantiate(_dnaShotPrefab, _backLaserSpawnPoint.position, Quaternion.identity);
 
             Rigidbody2D rb = dnaShot.GetComponent<Rigidbody2D>();
-            if(rb != null)
+            if (rb != null)
             {
-                rb.velocity = moveDirection * _dnaShotSpeed;
+                rb.velocity = direction * _dnaShotSpeed;
             }
 
-            angle += angleStep;
+            dnaShot.transform.rotation = Quaternion.Euler(0, 0, angle); // For visual spin
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

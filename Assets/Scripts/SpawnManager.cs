@@ -11,6 +11,22 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _dodgeEnemyPrefab;
     [SerializeField] private float _dodgeEnemySpawnChance = 0.2f; // 20% chance instead of regular enemy
 
+    [Header("Boss")]
+    [SerializeField] private GameObject _bossPrefab;
+    [SerializeField] private int _startWave = 1; // Set this to 5 in Inspector to test boss
+    [SerializeField] private float _bossIntroClipDelay = 2f;
+    [SerializeField] private float _bossSpawnDelay = 10f;
+    [SerializeField] private float _bossGrowDuration = 3f;
+    [SerializeField] private AudioClip _bossIntroClip1;
+    [SerializeField] private AudioClip _bossIntroClip2;
+    [SerializeField] private Vector3 _bossFinalScale = Vector3.one; //// Final visible scale for boss
+    [SerializeField] private float _bossDropDistance = 5f;
+    [SerializeField] private float _bossDropSpeed = 2f;
+    private bool _bossSpawned = false;
+
+    [Header("Testing")]
+    [SerializeField] private bool _testBossMode = false;
+    [SerializeField] private float _testBossDelay = 3f;// how long after Start to spawn the boss
 
     [Header("Powerups")]
     [SerializeField]private GameObject[] _powerups;
@@ -26,18 +42,102 @@ public class SpawnManager : MonoBehaviour
    
     [SerializeField] private UIManager _uiManager;// Reference to the UIManager script to update wave UI and countdown
 
-    private int _currentWave = 1; // Tracks the current wave number
+    private int _currentWave; 
     private bool _stopSpawning = false;// Flag to stop spawning when the player dies
 
 
     
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyWaves());
-        StartCoroutine(SpawnPowerupRoutine());
-        _uiManager.UpdateWaveText(_currentWave);
+        if (_testBossMode)
+        {
+            StartCoroutine(TestBossSpawn());
+        }
+        else
+        {
+            _currentWave = _startWave;//Start from selected wave
+            _uiManager.UpdateWaveText(_currentWave);
+            StartCoroutine(SpawnEnemyWaves());
+            StartCoroutine(SpawnPowerupRoutine());
+        }
     }
 
+    private IEnumerator TestBossSpawn()
+    {
+        Debug.Log("TEST MODE: Boss will spawn in" + _testBossDelay + "seconds");
+        yield return new WaitForSeconds(_testBossDelay);
+
+        //Skip Wave logic and directly trigger boss logic
+        _currentWave = 5;
+        _bossSpawned = false;
+
+        //Manually call just the boss spawn from SpawnEnemyWaves
+        yield return StartCoroutine(SpawnBossDirectly());
+    }
+
+    private IEnumerator SpawnBossDirectly()
+    {
+        _bossSpawned = true;
+        Debug.Log("Wave 5 complete. Spawning Boss!");
+
+        yield return new WaitForSeconds(_bossIntroClipDelay); // Optional delay before boss spawns
+
+        //Play first clip
+        if (_bossIntroClip1 != null)
+        {
+            AudioSource.PlayClipAtPoint(_bossIntroClip1, Camera.main.transform.position);
+            yield return new WaitForSeconds(_bossIntroClip1.length);
+        }
+
+        //Play second clip
+        if (_bossIntroClip2 != null)
+        {
+            AudioSource.PlayClipAtPoint(_bossIntroClip2, Camera.main.transform.position);
+            yield return new WaitForSeconds(_bossIntroClip2.length);
+        }
+
+
+
+        // wait remaining delay
+        float totalClipTime = (_bossIntroClip1?.length ?? 0) + (_bossIntroClip2?.length ?? 0);
+        float remainingDelay = _bossSpawnDelay - _bossIntroClipDelay - totalClipTime;
+        if (remainingDelay > 0)
+            yield return new WaitForSeconds(remainingDelay);
+
+        //Spawn the boss at a Tiny scale
+        Vector3 bossSpawnPosition = new Vector3(0, 17f, 0); // Adjust as needed
+        GameObject boss = Instantiate(_bossPrefab, bossSpawnPosition, Quaternion.identity);
+        boss.transform.localScale = Vector3.one * 0.01f;// Very tiny
+
+        //smoothly grow over time
+        float elapsed = 0f;
+        // Vector3 targetScale = Vector3.one;
+
+        while (elapsed < _bossGrowDuration)
+        {
+            float t = elapsed / _bossGrowDuration;
+            boss.transform.localScale = Vector3.Lerp(Vector3.one * 0.01f, _bossFinalScale, t);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        boss.transform.localScale = _bossFinalScale; //ensure final scale is exact
+
+        //Move boss downward by _bossDropDistance
+        Vector3 startPos = boss.transform.position;
+        Vector3 targetPos = startPos - new Vector3(0, _bossDropDistance, 0);
+        float dropProgress = 0f;
+
+        while (dropProgress < 1f)
+        {
+            dropProgress += Time.deltaTime * _bossDropSpeed;
+            boss.transform.position = Vector3.Lerp(startPos, targetPos, dropProgress);
+            yield return null;
+        }
+        boss.transform.position = targetPos; //make sure it lands exactly
+        _uiManager.UpdateWaveText(-1); // Hide or update to "Boss Fight" if you want
+        yield break; // Exit the coroutine, no more regular waves
+    }
     IEnumerator SpawnEnemyWaves()
     {
         yield return new WaitForSeconds(3.0f);// Wait a few seconds before the first wave starts
@@ -59,7 +159,6 @@ public class SpawnManager : MonoBehaviour
                 if (roll <= _smartEnemySpawnChance)
                 {
                     GameObject smartEnemy = Instantiate(_smartEnemyPrefab, posToSpawn, _smartEnemyPrefab.transform.rotation);
-
                     smartEnemy.transform.parent = _enemyContainer.transform;
                 }
                 else if (roll <= _smartEnemySpawnChance + _dodgeEnemySpawnChance)
@@ -97,12 +196,22 @@ public class SpawnManager : MonoBehaviour
 
             Debug.Log("Wave " + _currentWave + " completed");
 
-            yield return _uiManager.ShowWaveCountDown(5); // Show countdown before next wave
-            // Update wave count and wave UI
-            _currentWave++;
-            _uiManager.UpdateWaveText(_currentWave);
-          
-        } 
+            //HERE STARTS "WAVE 5" LOGIC
+            // If we just finished wave 5 and haven't spawned the boss yet
+            if (_currentWave == 5 && !_bossSpawned)
+            {
+                yield return StartCoroutine(SpawnBossDirectly());
+                yield break;
+            }
+            else
+            {
+                yield return _uiManager.ShowWaveCountDown(5); // Show countdown before next wave
+                _currentWave++;
+                _uiManager.UpdateWaveText(_currentWave);
+            }
+
+
+        }
     }
 
 

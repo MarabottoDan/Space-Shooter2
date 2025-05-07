@@ -75,7 +75,8 @@ public class Laser : MonoBehaviour
         Debug.Log("Laser hit: " + other.name);
         if (_hasHit) return;
 
-     if (other.tag == "Player" && _isEnemyLaser == true)
+        // Laser hits the player
+        if (other.CompareTag("Player") && _isEnemyLaser)
         {
             Player player = other.GetComponent<Player>();
 
@@ -88,35 +89,42 @@ public class Laser : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-     else if(other.CompareTag("Enemy") && _isEnemyLaser == false)
+        // Laser hits an enemy
+        else if (other.CompareTag("Enemy") && !_isEnemyLaser)
         {
             Enemy enemy = other.GetComponent<Enemy>();
-
             if (enemy != null)
             {
                 enemy.OnDeath();
+            }
+            else
+            {
+                SmartEnemy smartEnemy = other.GetComponent<SmartEnemy>();
+                if (smartEnemy != null)
+                {
+                    smartEnemy.Damage();
+                }
             }
 
             _hasHit = true;
             Destroy(this.gameObject);
         }
-        // If the laser collides with a Pickup AND it's an enemy laser
+
+        // Laser hits a pickup (only if it's an enemy laser)
         else if (other.CompareTag("Pickup") && _isEnemyLaser)
-        {   // Calculate the distance between where the laser was spawned and the pickup's position
-            // This ensures that only lasers fired from close range can destroy the pickup
+        {
             float distanceToPickup = Vector3.Distance(_startPosition, other.transform.position);
 
-            // If the laser was spawned close enough to the pickup, destroy the pickup
             if (distanceToPickup <= _pickupHitRange)
             {
-                Destroy(other.gameObject); // Destroy the pickup GameObject
+                Destroy(other.gameObject);
             }
-            // Mark this laser as having already hit something, so it won't trigger again
-            _hasHit = true;
-            Destroy(this.gameObject); // Destroy the laser itself, whether or not it destroyed the pickup
-        }
 
+            _hasHit = true;
+            Destroy(this.gameObject);
+        }
     }
+
 
     public void MarkAsHit()
     {

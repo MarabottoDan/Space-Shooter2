@@ -5,7 +5,7 @@ public class DNAShot : MonoBehaviour
 {
 
     [Header("Settings")]
-    [SerializeField] private float _speed = 5f;// Speed of DNA shot
+    //[SerializeField] private float _speed = 5f;// Speed of DNA shot
     [SerializeField] private float _lifetime = 5f;// How long the DNA shot exists if no collision
     
 

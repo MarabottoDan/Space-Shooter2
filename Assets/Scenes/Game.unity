@@ -1238,7 +1238,7 @@ MonoBehaviour:
     type: 3}
   _isChainLightningActive: 0
   _fireRate: 0.3
-  _lives: 3
+  _lives: 10
   _pickupPullSpeed: 10
   _pickPullRadius: 4.5
   _pullDuration: 10
@@ -1935,6 +1935,9 @@ MonoBehaviour:
   _dodgeEnemyPrefab: {fileID: 207792673117164090, guid: bd6511b4d81614c5196f64d7d600c232,
     type: 3}
   _dodgeEnemySpawnChance: 0.2
+  _bossPrefab: {fileID: 6480133936037159326, guid: 6668b20a4f50646e49214a23591a5af8,
+    type: 3}
+  _startWave: 5
   _powerups:
   - {fileID: 7359689525463552611, guid: 7bd29b2d94a5d4888825273d59c6c06f, type: 3}
   - {fileID: 5953146211615005244, guid: 5d842ebaf6aad4ae1a3967d053ba52c5, type: 3}
@@ -2084,75 +2087,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19438d701ffdb403a9107e9a40f00f38, type: 3}
---- !u!1001 &1328113417
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 981841657510133550, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8099825398563304087, guid: b7c0b2122971548868bd62442d2e20fa,
-        type: 3}
-      propertyPath: m_Name
-      value: HomingMissilePowerup
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b7c0b2122971548868bd62442d2e20fa, type: 3}
 --- !u!1 &1335465935
 GameObject:
   m_ObjectHideFlags: 0
