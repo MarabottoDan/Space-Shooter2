@@ -20,9 +20,13 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private AudioClip _bossIntroClip1;
     [SerializeField] private AudioClip _bossIntroClip2;
     [SerializeField] private Vector3 _bossFinalScale = Vector3.one; //// Final visible scale for boss
-    [SerializeField] private float _bossDropDistance = 5f;
+    [SerializeField] private float _bossDropDistance = 1f;
     [SerializeField] private float _bossDropSpeed = 2f;
     private bool _bossSpawned = false;
+
+    [Header("Boss UI")]
+    [SerializeField] private GameObject _bossHealthBarFrame; // Drag the HealthBarFrame here
+    [SerializeField] private float _bossHealthBarDelay = 1f;
 
     [Header("Testing")]
     [SerializeField] private bool _testBossMode = false;
@@ -105,7 +109,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(remainingDelay);
 
         //Spawn the boss at a Tiny scale
-        Vector3 bossSpawnPosition = new Vector3(0, 17f, 0); // Adjust as needed
+        Vector3 bossSpawnPosition = new Vector3(0, 150f, 0); // Adjust as needed
         GameObject boss = Instantiate(_bossPrefab, bossSpawnPosition, Quaternion.identity);
         boss.transform.localScale = Vector3.one * 0.01f;// Very tiny
 
@@ -136,7 +140,16 @@ public class SpawnManager : MonoBehaviour
         }
         boss.transform.position = targetPos; //make sure it lands exactly
         _uiManager.UpdateWaveText(-1); // Hide or update to "Boss Fight" if you want
+
+        yield return new WaitForSeconds(_bossHealthBarDelay);
+
+        if(_bossHealthBarFrame != null)
+        {
+            _bossHealthBarFrame.SetActive(true);
+        }
         yield break; // Exit the coroutine, no more regular waves
+
+
     }
     IEnumerator SpawnEnemyWaves()
     {

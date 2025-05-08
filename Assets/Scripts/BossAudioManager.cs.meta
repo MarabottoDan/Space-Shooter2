@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8b3daa61a6b004df6ae96a3e9b574cbe
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _bossBigGrowl: {fileID: 8300000, guid: 1f4d6f00f058a4add934723155d2b266, type: 3}
+  - _bossLoudGrowl: {fileID: 8300000, guid: a27b22cb021554c0591f2de48fcb6090, type: 3}
+  - _bossFinalGrowl: {fileID: 8300000, guid: d611bdffa2813465fa67905ecd22bad4, type: 3}
+  - _bossSpit: {fileID: 8300000, guid: 6146cb7a11dea401b8b29d3b0c293228, type: 3}
+  - _bossShortGrowl: {fileID: 8300000, guid: 23b2ce46c7de14049b543bbeab633c60, type: 3}
+  - _audioSource: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
