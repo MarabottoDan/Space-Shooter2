@@ -72,7 +72,9 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Laser hit: " + other.name);
+        Debug.Log("Laser hit: " + other.name + ", Tag: " + other.tag);
+
+        //Debug.Log("Laser hit: " + other.name);
         if (_hasHit) return;
 
         // Laser hits the player
@@ -123,6 +125,19 @@ public class Laser : MonoBehaviour
             _hasHit = true;
             Destroy(this.gameObject);
         }
+        else if (other.CompareTag("BossHelmet") && !_isEnemyLaser)
+        {
+            BossHelmet helmet = other.GetComponent<BossHelmet>();
+            if (helmet != null)
+            {
+                helmet.TakeDamage(1); // or however much damage your laser does
+            }
+            Debug.Log("Laser collided with: " + other.name + " | Tag: " + other.tag);
+            _hasHit = true;
+            Destroy(this.gameObject); // Destroy the laser after hitting the helmet
+            
+        }
+
     }
 
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class SpawnManager : MonoBehaviour
 
@@ -27,6 +29,10 @@ public class SpawnManager : MonoBehaviour
     [Header("Boss UI")]
     [SerializeField] private GameObject _bossHealthBarFrame; // Drag the HealthBarFrame here
     [SerializeField] private float _bossHealthBarDelay = 1f;
+    [SerializeField] private Image _bossHealthBarFill;
+    [SerializeField] private GameObject _bossHealthBarFillGO;
+
+
 
     [Header("Testing")]
     [SerializeField] private bool _testBossMode = false;
@@ -109,8 +115,20 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(remainingDelay);
 
         //Spawn the boss at a Tiny scale
-        Vector3 bossSpawnPosition = new Vector3(0, 150f, 0); // Adjust as needed
+        Vector3 bossSpawnPosition = new Vector3(0, 5f, 0); // Adjust as needed
         GameObject boss = Instantiate(_bossPrefab, bossSpawnPosition, Quaternion.identity);
+        // Assign the health bar directly to the helmet script
+        BossHelmet helmet = boss.GetComponentInChildren<BossHelmet>(true);
+        if (helmet != null && _bossHealthBarFill != null)
+        {
+            helmet.AssignHealthBar(_bossHealthBarFill);
+            Debug.Log("Assigned health bar directly from Inspector.");
+        }
+        else
+        {
+            Debug.LogWarning("❌ BossHelmet or HealthBarFill is missing!");
+        }
+
         boss.transform.localScale = Vector3.one * 0.01f;// Very tiny
 
         //smoothly grow over time
@@ -147,6 +165,11 @@ public class SpawnManager : MonoBehaviour
         {
             _bossHealthBarFrame.SetActive(true);
         }
+        if (_bossHealthBarFillGO != null)
+        {
+            _bossHealthBarFillGO.SetActive(true); // ✅ Enable it on boss spawn
+        }
+
         yield break; // Exit the coroutine, no more regular waves
 
 
@@ -214,6 +237,8 @@ public class SpawnManager : MonoBehaviour
             if (_currentWave == 5 && !_bossSpawned)
             {
                 yield return StartCoroutine(SpawnBossDirectly());
+                _stopSpawning = true;
+
                 yield break;
             }
             else
