@@ -52,11 +52,14 @@ public class SpawnManager : MonoBehaviour
    
     [SerializeField] private UIManager _uiManager;// Reference to the UIManager script to update wave UI and countdown
 
-    private int _currentWave; 
-    private bool _stopSpawning = false;// Flag to stop spawning when the player dies
+    private int _currentWave;
+    //private bool _stopSpawning = false;// Flag to stop spawning when the player dies
+    private bool _stopEnemySpawning = false;
+    private bool _stopPowerupSpawning = false;
 
 
-    
+
+
     public void StartSpawning()
     {
         if (_testBossMode)
@@ -67,6 +70,8 @@ public class SpawnManager : MonoBehaviour
         {
             _currentWave = _startWave;//Start from selected wave
             _uiManager.UpdateWaveText(_currentWave);
+            _stopEnemySpawning = false;
+            _stopPowerupSpawning = false;
             StartCoroutine(SpawnEnemyWaves());
             StartCoroutine(SpawnPowerupRoutine());
         }
@@ -170,14 +175,21 @@ public class SpawnManager : MonoBehaviour
             _bossHealthBarFillGO.SetActive(true); // ✅ Enable it on boss spawn
         }
 
+        if (!_stopPowerupSpawning)
+        {
+            Debug.Log("✅ Starting powerup spawner for boss wave.");
+            StartCoroutine(SpawnPowerupRoutine());
+        }
+
         yield break; // Exit the coroutine, no more regular waves
+
 
 
     }
     IEnumerator SpawnEnemyWaves()
     {
         yield return new WaitForSeconds(3.0f);// Wait a few seconds before the first wave starts
-        while (!_stopSpawning)
+        while (!_stopEnemySpawning)
         {
             // Calculate how many enemies to spawn this wave
             int regularEnemies = _startRegularEnemyCount + (_currentWave - 1); //Increases the number of regular enemies by 1 more each wave.
@@ -237,7 +249,7 @@ public class SpawnManager : MonoBehaviour
             if (_currentWave == 5 && !_bossSpawned)
             {
                 yield return StartCoroutine(SpawnBossDirectly());
-                _stopSpawning = true;
+                _stopEnemySpawning = true;
 
                 yield break;
             }
@@ -258,7 +270,7 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);// Wait 3 seconds before starting to spawn power-ups
 
-       while(!_stopSpawning)// Keep spawning while the player is alive
+       while(!_stopPowerupSpawning)// Keep spawning while the player is alive
         {
             // Choose a random X position at the top of the screen
             Vector3 posToSpawn = new Vector3(Random.Range(-17.0f, 17.0f), 12f, 0);
@@ -300,7 +312,8 @@ public class SpawnManager : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-        _stopSpawning = true;
+        _stopPowerupSpawning = true;
+        _stopEnemySpawning = true;
     }
 
 

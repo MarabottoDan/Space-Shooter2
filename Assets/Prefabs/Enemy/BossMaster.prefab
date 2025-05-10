@@ -637,7 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b806ce2c1334a669786993c968bd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 50
+  _maxHealth: 500
   _helmetDamageEffect: {fileID: 0}
   _damageSound: {fileID: 0}
 --- !u!1 &6480133935222328063

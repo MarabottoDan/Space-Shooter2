@@ -69,11 +69,28 @@ public class HomingMissile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if  (other.CompareTag("Enemy"))
+        if  (other.CompareTag("Player"))
+        {
+            return;
+        }
+        Debug.Log("Homing missile hit: " + other.tag);
+
+        if (other.CompareTag("Enemy"))
         {
             Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("BossHelmet"))
+        {
+            BossHelmet helmet = other.GetComponent<BossHelmet>();
+            if (helmet !=null)
+            {
+                helmet.TakeDamage(5);
+            }
+            Debug.Log("Missile collided with: " + other.name + " (Tag: " + other.tag + ")");
 
-            if (_explosionPrefab != null)
+        }
+
+        if (_explosionPrefab != null)
             {
                 Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             }
@@ -84,10 +101,22 @@ public class HomingMissile : MonoBehaviour
             }
 
             Destroy(this.gameObject,0.1f);
-        }
+        
     }
     private void FindNewTarget()
     {
+        GameObject boss = GameObject.FindGameObjectWithTag("BossHelmet");
+        if (boss != null)
+        {
+            float bossDistance = Vector3.Distance(transform.position, boss.transform.position);
+            if (bossDistance <= _detectionRadius)
+            {
+                _target = boss.transform;
+                Debug.Log("MISSILE: Locked onto BossHelmet manually.");
+                return;
+            }
+        }
+
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         float closestDistance = Mathf.Infinity;
         Transform nearestEnemy = null;

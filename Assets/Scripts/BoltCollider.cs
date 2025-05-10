@@ -14,5 +14,14 @@ public class BoltCollider : MonoBehaviour
 
             Destroy(gameObject); // Destroy the bolt
         }
+        else if (other.CompareTag("BossHelmet"))
+        {
+            BossHelmet helmet = other.GetComponent<BossHelmet>();
+            if (helmet != null)
+            {
+                helmet.TakeDamage(5);
+            }
+            Destroy(gameObject);
+        }
     }
 }

@@ -12,6 +12,8 @@ TagManager:
   - PlayerLaser
   - EnemyShield
   - Pickup
+  - BossHelmet
+  - BossHealthBar
   layers:
   - Default
   - TransparentFX
