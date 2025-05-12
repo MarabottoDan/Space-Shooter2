@@ -25,6 +25,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _bossDropDistance = 1f;
     [SerializeField] private float _bossDropSpeed = 2f;
     private bool _bossSpawned = false;
+    [SerializeField] private GameObject _bossOrbPhase1Prefab;
+
 
     [Header("Boss UI")]
     [SerializeField] private GameObject _bossHealthBarFrame; // Drag the HealthBarFrame here
@@ -120,14 +122,15 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(remainingDelay);
 
         //Spawn the boss at a Tiny scale
-        Vector3 bossSpawnPosition = new Vector3(0, 5f, 0); // Adjust as needed
+        Vector3 bossSpawnPosition = new Vector3(0, 5f, 0); 
         GameObject boss = Instantiate(_bossPrefab, bossSpawnPosition, Quaternion.identity);
         // Assign the health bar directly to the helmet script
         BossHelmet helmet = boss.GetComponentInChildren<BossHelmet>(true);
         if (helmet != null && _bossHealthBarFill != null)
         {
             helmet.AssignHealthBar(_bossHealthBarFill);
-            Debug.Log("Assigned health bar directly from Inspector.");
+            helmet.SetOrbPrefab(_bossOrbPhase1Prefab);
+            Debug.Log("Orb prefab assigned to BossHelmet from SpawnManager.");
         }
         else
         {

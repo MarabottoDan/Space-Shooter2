@@ -12,11 +12,22 @@ public class BossHelmet : MonoBehaviour
     private AudioSource _audioSource;
     private Image _healthBarFill;// Drag your health bar fill here in the Inspector
 
+    [Header("Phase One Transition")]
+    [SerializeField] private GameObject _bossOrbPhase1Prefab;
+    private Vector3 _orbSpawnPosition;
+
+    private bool _hasSpawnedOrb = false;
+    [SerializeField] private GameObject _helmetIcedVersion;
+
+
     // Start is called before the first frame update
     private void Start()
     {
         _currentHealth = _maxHealth;
         _audioSource = GetComponent<AudioSource>();
+
+        _orbSpawnPosition = new Vector3(-12f, 13f, 0f);
+
         // Lock the Z position to 0 in case it's inherited from parent
         Vector3 fixedZ = transform.position;
         fixedZ.z = 0f;
@@ -39,18 +50,37 @@ public class BossHelmet : MonoBehaviour
         }
 
         UpdateHealthBar();
+        Debug.Log("Helmet health: " + _currentHealth);
 
-        if (_currentHealth <= 0)
+
+        if (_currentHealth <= 0 && !_hasSpawnedOrb)
         {
-            DestroyHelmet();
+            _hasSpawnedOrb = true; //Prevents multiple spawning
+            StartCoroutine(HandleHelmetDestruction());
         }
     }
 
-    private void DestroyHelmet()
+    private IEnumerator HandleHelmetDestruction()
     {
+        Debug.Log("📍 BossHelmet will spawn orb at: " + _orbSpawnPosition);
+        Debug.Log("📦 Orb prefab is: " + _bossOrbPhase1Prefab?.name);
+
         Debug.Log("Helmet destroyed");
-        gameObject.SetActive(false);
+
+        if (_bossOrbPhase1Prefab != null)
+        {
+            Instantiate(_bossOrbPhase1Prefab, _orbSpawnPosition, Quaternion.identity);
+            Debug.Log("✅ Boss Phase 1 Orb Spawned");
+        }
+        else
+        {
+            Debug.LogWarning("❌ Orb prefab is not assigned!");
+        }
+
+        yield return null; // No need to deactivate yet
+                           // gameObject.SetActive(false); 
     }
+
 
     private void UpdateHealthBar()
     {
@@ -60,7 +90,32 @@ public class BossHelmet : MonoBehaviour
     public void AssignHealthBar(Image image)
     {
         _healthBarFill = image;
-        Debug.Log("✅ BossHelmet: Health bar assigned!");
+        Debug.Log("BossHelmet: Health bar assigned!");
+    }
+
+    public void SetOrbPrefab(GameObject orb)
+    {
+        _bossOrbPhase1Prefab = orb;
+        Debug.Log("Orb prefab set from SpawnManager.");
+    }
+    public void OnOrbSequenceComplete()
+    {
+        Debug.Log("Orb sequence complete. Now disabling or transitioning helmet...");
+
+        // For now, just log — later we can do:
+        // Destroy(gameObject);
+        // Or trigger phase 2 animations
+    }
+
+    public void ApplyIceBlast()
+    {
+        Debug.Log("Helmet hit by IceBlast!");
+
+        gameObject.SetActive(false); // Hide/dismiss current helmet
+        if (_helmetIcedVersion != null)
+        {
+            _helmetIcedVersion.SetActive(true); // Enable iced helmet
+        }
     }
 
 }

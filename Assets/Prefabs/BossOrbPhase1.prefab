@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2665894683020684385}
   - component: {fileID: 8923052084886981432}
   - component: {fileID: 1879528577849615759}
+  - component: {fileID: 7901499061955083202}
   m_Layer: 0
   m_Name: BossOrbPhase1
   m_TagString: Untagged
@@ -69,9 +70,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1730453635
+  m_SortingLayer: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: e763db2d1feb64ee1b02a0a26f930a76, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -117,6 +118,24 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.027441978, y: 0}
+  m_Offset: {x: -0.027441978, y: -0.022235036}
   serializedVersion: 2
-  m_Radius: 2.6228538
+  m_Radius: 0.05808103
+--- !u!114 &7901499061955083202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671843346683113624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b96e7027b9744803b4c51fb7d0bb674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pickupEffectPrefab: {fileID: 5927329452293420317, guid: 87ba7f8b1651c4a88b2d96ee0746fa70,
+    type: 3}
+  _targetPosition: {x: 0, y: -7, z: 0}
+  _moveSpeed: 2
+  _pulseSpeed: 2
+  _pulseScaleAmount: 0.8

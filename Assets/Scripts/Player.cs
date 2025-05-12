@@ -79,6 +79,9 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _playerDestroyedSound;
     [SerializeField] private AudioClip _noMoreLivesForYouClip;// Clip for when player has full lives and collects Health PowerUp
 
+    [SerializeField] private GameObject _iceBlastPrefab;
+    [SerializeField] private Transform _iceBlastSpawnPoint;
+    private bool _inputEnabled = true;
 
 
     [SerializeField] private int _score;
@@ -126,6 +129,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_inputEnabled) return;
+
         Calculatemovement();
         ThrusterSpeed();
 
@@ -157,6 +162,21 @@ public class Player : MonoBehaviour
         }
       
     }
+    public void DisableInputAndFireIce()
+    {
+        _inputEnabled = false;
+
+        if (_iceBlastPrefab != null && _iceBlastSpawnPoint != null)
+        {
+            Instantiate(_iceBlastPrefab, _iceBlastSpawnPoint.position, Quaternion.identity);
+            Debug.Log("❄️ IceBlast fired automatically!");
+        }
+        else
+        {
+            Debug.LogWarning("IceBlast prefab or spawn point not set!");
+        }
+    }
+
 
     private IEnumerator PullRoutine()
     {

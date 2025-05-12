@@ -606,6 +606,9 @@ MonoBehaviour:
   _maxHealth: 50
   _helmetDamageEffect: {fileID: 0}
   _damageSound: {fileID: 0}
+  _bossOrbPhase1Prefab: {fileID: 1671843346683113624, guid: 8b3d8815d871b4acbab06dc272f7bc37,
+    type: 3}
+  _orbSpawnPosition: {x: -10, y: 13, z: 0}
 --- !u!61 &998246290447234816
 BoxCollider2D:
   m_ObjectHideFlags: 0
