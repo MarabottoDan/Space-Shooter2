@@ -26,6 +26,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _bossDropSpeed = 2f;
     private bool _bossSpawned = false;
     [SerializeField] private GameObject _bossOrbPhase1Prefab;
+    
 
 
     [Header("Boss UI")]
@@ -122,7 +123,7 @@ public class SpawnManager : MonoBehaviour
             yield return new WaitForSeconds(remainingDelay);
 
         //Spawn the boss at a Tiny scale
-        Vector3 bossSpawnPosition = new Vector3(0, 5f, 0); 
+        Vector3 bossSpawnPosition = new Vector3(0, 2f, 0); 
         GameObject boss = Instantiate(_bossPrefab, bossSpawnPosition, Quaternion.identity);
         // Assign the health bar directly to the helmet script
         BossHelmet helmet = boss.GetComponentInChildren<BossHelmet>(true);
@@ -134,7 +135,7 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("❌ BossHelmet or HealthBarFill is missing!");
+            Debug.LogWarning("BossHelmet or HealthBarFill is missing!");
         }
 
         boss.transform.localScale = Vector3.one * 0.01f;// Very tiny

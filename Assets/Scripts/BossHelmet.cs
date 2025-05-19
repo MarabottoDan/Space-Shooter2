@@ -62,19 +62,19 @@ public class BossHelmet : MonoBehaviour
 
     private IEnumerator HandleHelmetDestruction()
     {
-        Debug.Log("📍 BossHelmet will spawn orb at: " + _orbSpawnPosition);
-        Debug.Log("📦 Orb prefab is: " + _bossOrbPhase1Prefab?.name);
+        Debug.Log("BossHelmet will spawn orb at: " + _orbSpawnPosition);
+        Debug.Log("Orb prefab is: " + _bossOrbPhase1Prefab?.name);
 
         Debug.Log("Helmet destroyed");
 
         if (_bossOrbPhase1Prefab != null)
         {
             Instantiate(_bossOrbPhase1Prefab, _orbSpawnPosition, Quaternion.identity);
-            Debug.Log("✅ Boss Phase 1 Orb Spawned");
+            Debug.Log("Boss Phase 1 Orb Spawned");
         }
         else
         {
-            Debug.LogWarning("❌ Orb prefab is not assigned!");
+            Debug.LogWarning("Orb prefab is not assigned!");
         }
 
         yield return null; // No need to deactivate yet

@@ -17,11 +17,8 @@ public class Laser : MonoBehaviour
         // Record the initial position of the laser when it spawns
         // This will later be used to calculate the distance to a pickup
         _startPosition = transform.position;
-    
 
     }
-
-
 
     void Update()
     {

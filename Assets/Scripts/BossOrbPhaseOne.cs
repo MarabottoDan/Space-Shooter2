@@ -29,7 +29,7 @@ public class BossOrbPhaseOne : MonoBehaviour
     {
         
 
-        Debug.Log("🟢 Orb spawned at: " + transform.position);
+        Debug.Log("Orb spawned at: " + transform.position);
         _baseScale = transform.localScale;
         _player = GameObject.FindWithTag("Player")?.transform;
     }
@@ -59,7 +59,7 @@ public class BossOrbPhaseOne : MonoBehaviour
     {
         if (_reachedTarget && other.CompareTag("Player"))
         {
-            Debug.Log("🟢 Orb collected!");
+            Debug.Log("Orb collected!");
 
             if (_pickupEffectPrefab != null)
             {

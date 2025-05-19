@@ -21,8 +21,6 @@ public class DodgeLaser : MonoBehaviour
 
     }
 
-
-
     void Update()
     {
         if (_isEnemyLaser == false)
