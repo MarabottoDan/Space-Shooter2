@@ -77,8 +77,7 @@ public class BossHelmet : MonoBehaviour
             Debug.LogWarning("Orb prefab is not assigned!");
         }
 
-        yield return null; // No need to deactivate yet
-                           // gameObject.SetActive(false); 
+        yield return null; 
     }
 
 

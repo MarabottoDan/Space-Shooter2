@@ -208,6 +208,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3565301464739861364}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &79518905 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2112791284967040844, guid: 6d1c99afa8c6746789ffa43738c380cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 3565301464739861364}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 79518904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &125279672 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7244303200994808375, guid: 19438d701ffdb403a9107e9a40f00f38,
@@ -364,6 +376,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4313306996721000296}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &419896073 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4935722739894207418, guid: d0048f293448a47668de501509202cce,
+    type: 3}
+  m_PrefabInstance: {fileID: 4313306996721000296}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419896072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &436951484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,6 +2121,8 @@ MonoBehaviour:
   _bossHealthBarFillGO: {fileID: 1405454536}
   _leftEyeHealthBarGO: {fileID: 419896072}
   _rightEyeHealthBarGO: {fileID: 79518904}
+  _leftEyeHealthBarFill: {fileID: 419896073}
+  _rightEyeHealthBarFill: {fileID: 79518905}
   _testBossMode: 1
   _testBossDelay: 3
   _powerups:

@@ -36,6 +36,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _bossHealthBarFillGO;
     [SerializeField] private GameObject _leftEyeHealthBarGO;
     [SerializeField] private GameObject _rightEyeHealthBarGO;
+    [SerializeField] private Image _leftEyeHealthBarFill;
+    [SerializeField] private Image _rightEyeHealthBarFill;
+
 
 
 
@@ -139,6 +142,26 @@ public class SpawnManager : MonoBehaviour
         else
         {
             Debug.LogWarning("BossHelmet or HealthBarFill is missing!");
+        }
+        //Assign eye health bars
+
+        BossEye[] eyes = boss.GetComponentsInChildren<BossEye>(true);
+        foreach (BossEye eye in eyes)
+        {
+            if (eye.name.Contains("Left") && _leftEyeHealthBarFill != null)
+            {
+                eye.AssignHealthBar(_leftEyeHealthBarFill);
+                Debug.Log($"{eye.name}: Eye HealthBar assigned = {_leftEyeHealthBarFill.name}");
+            }
+            else if (eye.name.Contains("Right") && _rightEyeHealthBarFill != null)
+            {
+                eye.AssignHealthBar(_rightEyeHealthBarFill);
+                Debug.Log($"{eye.name}: Eye HealthBar assigned = {_rightEyeHealthBarFill.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"{eye.name}: Could not assign Eye HealthBar (missing reference?)");
+            }
         }
 
         boss.transform.localScale = Vector3.one * 0.01f;// Very tiny
