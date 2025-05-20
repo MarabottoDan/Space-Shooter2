@@ -10,7 +10,7 @@ public class BossOrbPhaseOne : MonoBehaviour
 
     [Header("Movement Settings")]
     [SerializeField] private Vector3 _targetPosition = new Vector3(3f, -7f, 0f);
-    [SerializeField] private float _moveSpeed = 2f;
+    [SerializeField] private float _moveSpeed = 26f;
 
     [Header("Pulse Animation")]
     [SerializeField] private float _pulseSpeed = 2f;

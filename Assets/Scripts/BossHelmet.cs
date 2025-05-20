@@ -19,6 +19,12 @@ public class BossHelmet : MonoBehaviour
     private bool _hasSpawnedOrb = false;
     [SerializeField] private GameObject _helmetIcedVersion;
 
+    [SerializeField] private SpriteRenderer _helmetSprite;
+    [SerializeField] private Color _damageColor = Color.red;
+    [SerializeField] private float _flashDuration = 0.1f;
+    private Color _originalColor;
+
+
 
     // Start is called before the first frame update
     private void Start()
@@ -31,7 +37,9 @@ public class BossHelmet : MonoBehaviour
         // Lock the Z position to 0 in case it's inherited from parent
         Vector3 fixedZ = transform.position;
         fixedZ.z = 0f;
-        transform.position = fixedZ;    
+        transform.position = fixedZ;
+        _originalColor = _helmetSprite.color;
+
 
     }
 
@@ -47,6 +55,11 @@ public class BossHelmet : MonoBehaviour
         if (_damageSound != null && _audioSource != null)
         {
             _audioSource.PlayOneShot(_damageSound);
+        }
+
+        if (_helmetSprite != null)
+        {
+            StartCoroutine(FlashDamageEffect());
         }
 
         UpdateHealthBar();
@@ -130,6 +143,13 @@ public class BossHelmet : MonoBehaviour
         {
             Debug.LogWarning("Player not found to re-enable input.");
         }
+    }
+
+    private IEnumerator FlashDamageEffect()
+    {
+        _helmetSprite.color = _damageColor;
+        yield return new WaitForSeconds(_flashDuration);
+        _helmetSprite.color = _originalColor;
     }
 
 
