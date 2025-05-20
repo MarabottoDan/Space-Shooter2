@@ -102,9 +102,7 @@ public class BossHelmet : MonoBehaviour
     {
         Debug.Log("Orb sequence complete. Now disabling or transitioning helmet...");
 
-        // For now, just log — later we can do:
-        // Destroy(gameObject);
-        // Or trigger phase 2 animations
+        
     }
 
     public void ApplyIceBlast()
@@ -112,10 +110,28 @@ public class BossHelmet : MonoBehaviour
         Debug.Log("Helmet hit by IceBlast!");
 
         gameObject.SetActive(false); // Hide/dismiss current helmet
-        if (_helmetIcedVersion != null)
+
+        SpawnManager spawnManager = GameObject.Find("SpawnManager")?.GetComponent<SpawnManager>();
+        if (spawnManager != null)
         {
-            _helmetIcedVersion.SetActive(true); // Enable iced helmet
+            spawnManager.RevealBossEyesUI(); // This hides Alien bar and shows both eye bars
+        }
+        else
+        {
+            Debug.LogWarning("SpawnManager not found in ApplyIceBlast()");
+        }
+
+        // Re-enable Player Input
+        Player player = GameObject.FindWithTag("Player")?.GetComponent<Player>();
+        if (player != null)
+        {
+            player.EnableInput();
+        }
+        else
+        {
+            Debug.LogWarning("Player not found to re-enable input.");
         }
     }
+
 
 }

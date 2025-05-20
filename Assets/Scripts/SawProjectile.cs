@@ -5,7 +5,7 @@ using UnityEngine;
 public class SawProjectile : MonoBehaviour
 {
     [SerializeField] private float _speed = 8f;
-    [SerializeField] private float _lifetime = 5f;
+    //[SerializeField] private float _lifetime = 5f;
     public static int TotalSawsRemaining = 0;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] public GameObject _icedHelmet;

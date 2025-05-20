@@ -175,7 +175,14 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("IceBlast prefab or spawn point not set!");
         }
+
     }
+    public void EnableInput()
+    {
+        _inputEnabled = true;
+        Debug.Log("Player input re-enabled!");
+    }
+
 
 
     private IEnumerator PullRoutine()

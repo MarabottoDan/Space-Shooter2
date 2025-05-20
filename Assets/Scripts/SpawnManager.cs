@@ -34,6 +34,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private float _bossHealthBarDelay = 1f;
     [SerializeField] private Image _bossHealthBarFill;
     [SerializeField] private GameObject _bossHealthBarFillGO;
+    [SerializeField] private GameObject _leftEyeHealthBarGO;
+    [SerializeField] private GameObject _rightEyeHealthBarGO;
+
 
 
 
@@ -267,6 +270,27 @@ public class SpawnManager : MonoBehaviour
 
         }
     }
+    public void RevealBossEyesUI()
+    {
+        if (_bossHealthBarFrame != null)
+        {
+            _bossHealthBarFrame.SetActive(false); // Hide the helmet health bar
+            Debug.Log("Evil Alien Health Bar hidden");
+        }
+
+        if (_leftEyeHealthBarGO != null)
+        {
+            _leftEyeHealthBarGO.SetActive(true); // Show left eye health bar
+            Debug.Log("Left Eye Health bar revealed");
+        }
+
+        if (_rightEyeHealthBarGO != null)
+        {
+            _rightEyeHealthBarGO.SetActive(true); // Show right eye health bar
+            Debug.Log("Right Eye Health bar revealed");
+        }
+    }
+
 
 
 

@@ -131,8 +131,19 @@ public class Laser : MonoBehaviour
             }
             Debug.Log("Laser collided with: " + other.name + " | Tag: " + other.tag);
             _hasHit = true;
-            Destroy(this.gameObject); // Destroy the laser after hitting the helmet
-            
+            Destroy(this.gameObject); // Destroy the laser after hitting the helmet            
+        }
+        else if (!_isEnemyLaser && other.GetComponent<BossEye>() != null)
+        {
+            BossEye eye = other.GetComponent<BossEye>();
+            if (eye != null)
+            {
+                eye.TakeDamage(1);
+                Debug.Log("Boss eye hit: " + other.name);
+            }
+
+            _hasHit = true;
+            Destroy(this.gameObject);
         }
 
     }
