@@ -56,7 +56,7 @@ MonoBehaviour:
   _eyeSprite: {fileID: 1993492433753090753}
   _damageColor: {r: 1, g: 0, b: 0, a: 1}
   _flashDuration: 0.1
-  _eyeHealthBarFill: {fileID: 0}
+  _healthBarFill: {fileID: 0}
 --- !u!50 &633490251432463948
 Rigidbody2D:
   serializedVersion: 4
@@ -113,7 +113,37 @@ MonoBehaviour:
   _eyeSprite: {fileID: 2800136192200908431}
   _damageColor: {r: 1, g: 0, b: 0, a: 1}
   _flashDuration: 0.1
-  _eyeHealthBarFill: {fileID: 0}
+  _healthBarFill: {fileID: 0}
+--- !u!1 &6266918973019790638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 800370779243672295}
+  m_Layer: 0
+  m_Name: RightHandLaserSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &800370779243672295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6266918973019790638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.2, y: 5.1, z: 0.1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 6480133935767878067}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6480133935097589280
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +249,7 @@ MonoBehaviour:
   _helmetIcedVersion: {fileID: 6318446928446112569, guid: b2cfe385f51e344c899a8a3aeab26f62,
     type: 3}
   _helmetSprite: {fileID: 6480133935097589283}
-  _damageColor: {r: 0.023139905, g: 0.9811321, b: 0.89860934, a: 1}
+  _damageColor: {r: 0.98039216, g: 0.050264638, b: 0.023529401, a: 1}
   _flashDuration: 0.1
 --- !u!61 &998246290447234816
 BoxCollider2D:
@@ -391,7 +421,7 @@ GameObject:
   - component: {fileID: 6480133935767878067}
   - component: {fileID: 6480133935767878066}
   m_Layer: 0
-  m_Name: 'BossLeftHand '
+  m_Name: 'BossRightHand '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -407,7 +437,8 @@ Transform:
   m_LocalRotation: {x: -0.3171358, y: 0.0014537544, z: -0.23226598, w: 0.9194973}
   m_LocalPosition: {x: 4.373964, y: -1.8745562, z: 0}
   m_LocalScale: {x: 0.5576665, y: 0.5576664, z: 0.5576665}
-  m_Children: []
+  m_Children:
+  - {fileID: 800370779243672295}
   m_Father: {fileID: 6480133935222328049}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -35.629, y: 10.634001, z: -31.779001}
@@ -618,8 +649,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6480133936208736430}
   - component: {fileID: 6480133936208736431}
+  - component: {fileID: 3489029136922242693}
   m_Layer: 0
-  m_Name: BossRightHand
+  m_Name: BossLeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -634,8 +666,9 @@ Transform:
   m_GameObject: {fileID: 6480133936208736428}
   m_LocalRotation: {x: -0, y: -0, z: 0.111076444, w: 0.9938119}
   m_LocalPosition: {x: -4.373964, y: -4.37, z: 0}
-  m_LocalScale: {x: 0.5982166, y: 0.5982166, z: 0.5982167}
-  m_Children: []
+  m_LocalScale: {x: 0.5982166, y: 0.5982166, z: 0}
+  m_Children:
+  - {fileID: 3524175896635417543}
   m_Father: {fileID: 6480133935222328049}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 12.755001}
@@ -689,6 +722,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3489029136922242693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480133936208736428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1a7464f132b4348ade38f811f930d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _laserPrefab: {fileID: 8533343822115711286, guid: 99120e3bbb17249798724d48b3256776,
+    type: 3}
+  _laserSpawnPoint: {fileID: 3524175896635417543}
+  _laserSpeed: 5
+  _fireRate: 2
 --- !u!1 &7839273458206147763
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,8 +763,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7839273458206147763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0398458, y: 0, z: 0}
-  m_LocalScale: {x: 0.25996011, y: 0.25996011, z: 0.25996011}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 2800136192200908430}
   m_RootOrder: 0
@@ -743,10 +793,40 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8076644540774345598}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.99548656, y: 0, z: 0}
-  m_LocalScale: {x: 0.19909304, y: 0.19909304, z: 0.19909304}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 1993492433753090754}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8173687686016224752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3524175896635417543}
+  m_Layer: 0
+  m_Name: LeftHandLaserSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3524175896635417543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8173687686016224752}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5.4, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 6480133936208736430}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4523766101301296444

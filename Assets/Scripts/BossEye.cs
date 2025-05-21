@@ -83,12 +83,28 @@ public class BossEye : MonoBehaviour
 
     private void Die()
     {
+        Debug.Log($"{this.name} -> DIE() CALLED");
+
         if (_eyeExplosionPrefab != null)
         {
             Instantiate(_eyeExplosionPrefab, transform.position, Quaternion.identity);
         }
 
+        if (_damageSound != null)
+        {
+            GameObject audioObj = new GameObject("EyeDeathSound");
+            audioObj.transform.position = transform.position;
+
+            AudioSource tempAudio = audioObj.AddComponent<AudioSource>();
+            tempAudio.clip = _damageSound;
+            tempAudio.volume = 1f;
+            tempAudio.Play();
+
+            Destroy(audioObj, _damageSound.length);
+        }
+
         Debug.Log($"{this.name} destroyed!");
         Destroy(this.gameObject);
     }
+
 }
