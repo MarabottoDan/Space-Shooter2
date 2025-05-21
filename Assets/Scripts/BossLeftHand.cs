@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-
 using UnityEngine;
 
 public class BossLeftHand : MonoBehaviour
@@ -14,8 +13,16 @@ public class BossLeftHand : MonoBehaviour
     private float _nextFireTime = 0f;
     private bool _canFire = false;
 
+    private Transform _playerTransform;
+
     void Start()
     {
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            _playerTransform = player.transform;
+        }
+
         StartCoroutine(StartFiringWithDelay());
     }
 
@@ -28,23 +35,31 @@ public class BossLeftHand : MonoBehaviour
 
     void Update()
     {
-        if (_canFire && Time.time >= _nextFireTime)
+        if (_canFire && Time.time >= _nextFireTime && _playerTransform != null)
         {
             FireLaser();
             _nextFireTime = Time.time + _fireRate;
         }
+
+        
     }
 
     private void FireLaser()
     {
-        if (_laserPrefab != null && _laserSpawnPoint != null)
+        if (_laserPrefab != null && _laserSpawnPoint != null && _playerTransform != null)
         {
             GameObject laser = Instantiate(_laserPrefab, _laserSpawnPoint.position, Quaternion.identity);
+
+            Vector2 direction = (_playerTransform.position - _laserSpawnPoint.position).normalized;
+
             Rigidbody2D rb = laser.GetComponent<Rigidbody2D>();
+
             if (rb != null)
             {
-                rb.velocity = Vector2.down * _laserSpeed;
+                rb.velocity = direction * _laserSpeed;     
             }
+            
+
         }
     }
 }
