@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class BossHandRoundProjectile : MonoBehaviour
 {
-    [SerializeField] private int _damageAmount = 2;
+    
 
     // Start is called before the first frame update
     void Start()
