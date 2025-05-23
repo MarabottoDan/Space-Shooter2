@@ -19,7 +19,20 @@ public class IceBlast : MonoBehaviour
                 helmet.ApplyIceBlast();
             }
 
+            BossFirstAndSecondPhase _bossPhaseController = helmet.GetComponentInParent<BossFirstAndSecondPhase>();
+            if (_bossPhaseController != null)
+            {
+                _bossPhaseController.ContinueAfterOrb();
+            }
+            else
+            {
+                Debug.LogWarning("BossPhaseController not found from IceBlast.");
+            }
+
             Destroy(gameObject); // Destroy IceBlast after hit
         }
     }
+
+    
+
 }

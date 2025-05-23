@@ -10,6 +10,8 @@ public class BossFirstAndSecondPhase : MonoBehaviour
     [SerializeField] private float _delayBeforeMovement = 10f;
     [SerializeField] private float _timeBetweenMoves = 6f;
     [SerializeField] private Vector3 _phaseTwoStartPosition = new Vector3(0, 3, 0);
+
+    private bool _waitingForOrbCollection = false;
     [Header("Phase 2 start")]
     
     [SerializeField] private float _phaseTwoMoveSpeed = 10f;
@@ -27,6 +29,8 @@ public class BossFirstAndSecondPhase : MonoBehaviour
    
     private AudioSource _cameraAudioSource;
     [SerializeField] private AudioSource _bossAudioSource;
+    [SerializeField] private GameObject _rightEye;
+
 
 
 
@@ -53,6 +57,11 @@ public class BossFirstAndSecondPhase : MonoBehaviour
 
         while (true)
         {
+             while (_waitingForOrbCollection)
+            {
+                yield return null;
+            }
+
             yield return StartCoroutine(MoveToRandomX());
             yield return new WaitForSeconds(_timeBetweenMoves);
         }
@@ -85,6 +94,8 @@ public class BossFirstAndSecondPhase : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, _phaseTwoStartPosition, _phaseTwoMoveSpeed * Time.deltaTime);
             yield return null;
+
+            _waitingForOrbCollection = true;
         }
 
         StartCoroutine(DelayedSpitAttack());
@@ -120,6 +131,11 @@ public class BossFirstAndSecondPhase : MonoBehaviour
 
 
         StartCoroutine(GrowSpit(spitInstance));
+
+        _rightEye.GetComponent<RightEyeBehavior>().StartFlashLoop();
+       
+
+
     }
 
     private IEnumerator GrowSpit(GameObject spit)
@@ -168,5 +184,12 @@ public class BossFirstAndSecondPhase : MonoBehaviour
         Debug.Log("Spit reached below -30 Y. Destroying.");
         Destroy(spit);
     }
+
+    public void ContinueAfterOrb()
+    {
+        _waitingForOrbCollection = false;
+        StartCoroutine(BeginMovementRoutine());
+    }
+
 
 }
