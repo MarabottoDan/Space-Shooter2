@@ -24,11 +24,22 @@ public class BossHelmet : MonoBehaviour
     [SerializeField] private float _flashDuration = 0.1f;
     private Color _originalColor;
 
+    private BossFirstAndSecondPhase _bossPhaseController;
+
+
 
 
     // Start is called before the first frame update
     private void Start()
     {
+
+        _bossPhaseController = GetComponentInParent<BossFirstAndSecondPhase>();
+
+        if (_bossPhaseController == null)
+        {
+            Debug.LogWarning("BossPhaseController not found on parent!");
+        }
+
         _currentHealth = _maxHealth;
         _audioSource = GetComponent<AudioSource>();
 
@@ -69,6 +80,11 @@ public class BossHelmet : MonoBehaviour
         if (_currentHealth <= 0 && !_hasSpawnedOrb)
         {
             _hasSpawnedOrb = true; //Prevents multiple spawning
+
+            if (_bossPhaseController != null)
+            {
+                _bossPhaseController.MoveToPhaseTwoStart();
+            }
             StartCoroutine(HandleHelmetDestruction());
         }
     }
