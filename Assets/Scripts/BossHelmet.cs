@@ -159,6 +159,8 @@ public class BossHelmet : MonoBehaviour
         {
             Debug.LogWarning("Player not found to re-enable input.");
         }
+
+        _bossPhaseController.ContinueAfterOrb();
     }
 
     private IEnumerator FlashDamageEffect()

@@ -87,7 +87,18 @@ public class BossEye : MonoBehaviour
 
         if (_eyeExplosionPrefab != null)
         {
-            Instantiate(_eyeExplosionPrefab, transform.position, Quaternion.identity);
+            Transform bossTransform = transform.parent; // Get the boss (eye's parent)
+
+            if (bossTransform != null)
+            {
+                Instantiate(_eyeExplosionPrefab, transform.position, Quaternion.identity, bossTransform);
+            }
+            else
+            {
+                // Fallback: no parent, spawn in world space
+                Instantiate(_eyeExplosionPrefab, transform.position, Quaternion.identity);
+            }
+
         }
 
         if (_damageSound != null)

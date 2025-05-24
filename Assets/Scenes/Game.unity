@@ -1370,16 +1370,16 @@ MonoBehaviour:
   _chainLightningShotPrefab: {fileID: 979781116792606847, guid: 3c1675369fcec4e6cb544a69a77c3bb6,
     type: 3}
   _isChainLightningActive: 0
-  _fireRate: 0.3
-  _lives: 10
+  _fireRate: 0.1
+  _lives: 100
   _pickupPullSpeed: 10
   _pickPullRadius: 4.5
   _pullDuration: 10
   _pullCooldown: 15
   _magnetBar: {fileID: 1527037110}
   _magneticWavesPrefab: {fileID: 773198039}
-  _maxAmmo: 15
-  _currentAmmo: 0
+  _maxAmmo: 200
+  _currentAmmo: 200
   _ammoText: {fileID: 1541706635}
   _isShieldsActive: 0
   _shieldVisualizer: {fileID: 1640295640}
