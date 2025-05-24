@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -95,6 +96,13 @@ public class Player : MonoBehaviour
      };
     // private bool _isGameOver = false;
     private CameraShake _cameraShake;
+
+    [Header("Black Hole")]
+    private bool _inBlackHole = false;
+    private float _blackHoleMovementMultiplier = 0.1f;//10% normal speed
+    private float _originalMoveSpeed;
+    private List<Transform> _blackHoleChain = new List<Transform>();
+    private Coroutine _teleportRoutine = null;
 
     // Start is called before the first frame update
     void Start()
@@ -283,8 +291,11 @@ public class Player : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector3 _direction = new Vector3(horizontalInput, verticalInput, 0);
+        float adjustedSpeed = _inBlackHole ? _speed * _blackHoleMovementMultiplier : _speed;
+        transform.Translate(_direction * adjustedSpeed * Time.deltaTime);
 
-        transform.Translate(_direction * _speed * Time.deltaTime);
+
+        //transform.Translate(_direction * _speed * Time.deltaTime);
 
         if (transform.position.y >= 0)
         {
@@ -307,6 +318,48 @@ public class Player : MonoBehaviour
 
      
     }
+
+    public void StartBlackHoleChain(List<Transform> blackHolePositions)
+    {
+        if (_teleportRoutine != null) return; // Already running
+
+        _blackHoleChain = blackHolePositions;
+        _teleportRoutine = StartCoroutine(TeleportChainRoutine());
+    }
+
+    private IEnumerator TeleportChainRoutine()
+    {
+        for (int i = 0; i < _blackHoleChain.Count; i++)
+        {
+            yield return new WaitForSeconds(2f); // Wait 2 seconds
+            if (_blackHoleChain[i] != null)
+            {
+                transform.position = _blackHoleChain[i].position;
+                Debug.Log("Teleported to black hole " + (i + 1));
+            }
+        }
+
+        // Finished teleporting
+        ExitBlackHole();
+        _teleportRoutine = null;
+    }
+
+
+
+    public void EnterBlackHole(BlackHole bh)
+    {
+        if (_inBlackHole) return;
+        _inBlackHole = true;
+        Debug.Log("Player entered Black Hole, movement severely limited");
+    }
+
+    public void ExitBlackHole()
+    {
+        if (!_inBlackHole) return;
+        _inBlackHole = false;
+        Debug.Log("Player exited black hole, movement restored");
+    }
+
 
     void ThrusterSpeed()
 

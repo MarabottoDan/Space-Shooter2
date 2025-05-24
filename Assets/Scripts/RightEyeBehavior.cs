@@ -7,7 +7,9 @@ public class RightEyeBehavior : MonoBehaviour
     private Transform _player;
     [SerializeField] private SpriteRenderer _eyeSprite;
     [SerializeField] private Color _flashColor = Color.red;
-    
+
+    [SerializeField] private GameObject _leftEye;
+
 
 
     private Color _originalColor;
@@ -63,6 +65,20 @@ public class RightEyeBehavior : MonoBehaviour
 
             // Phase 2: Flash 3x per second (~0.17s) for 2 seconds
             yield return StartCoroutine(FlashPattern(0.17f, 2f));
+
+            if (_leftEye != null)
+            {
+                LeftEyeBehavior leftEye = _leftEye.GetComponent<LeftEyeBehavior>();
+                if (leftEye != null)
+                {
+                    leftEye.StartBlackHoleAttack();
+                }
+                else
+                {
+                    Debug.LogWarning("LeftEyeBehavior not found on _leftEye.");
+                }
+            }
+
 
             yield return new WaitForSeconds(20f);
         }
