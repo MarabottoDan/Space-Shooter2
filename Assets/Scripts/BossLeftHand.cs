@@ -62,4 +62,10 @@ public class BossLeftHand : MonoBehaviour
 
         }
     }
+    public void StopFiring()
+    {
+        Debug.Log("BossLeftHand: Stopping firing.");
+        _canFire = false;
+    }
+
 }

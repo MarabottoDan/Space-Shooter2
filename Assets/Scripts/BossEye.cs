@@ -21,6 +21,9 @@ public class BossEye : MonoBehaviour
 
     [SerializeField] private Image _healthBarFill; // <-- Use this ONE for both Inspector and SpawnManager
 
+    [SerializeField] private string _eyeSide = "Left"; 
+
+
     void Start()
     {
         _currentHealth = _maxHealth;
@@ -99,6 +102,7 @@ public class BossEye : MonoBehaviour
                 Instantiate(_eyeExplosionPrefab, transform.position, Quaternion.identity);
             }
 
+
         }
 
         if (_damageSound != null)
@@ -115,6 +119,10 @@ public class BossEye : MonoBehaviour
         }
 
         Debug.Log($"{this.name} destroyed!");
+            // Notify the BossEyeDeathHandler which eye was destroyed
+
+            FindObjectOfType<BossEyeDeathHandler>()?.OnEyeDeath(_eyeSide);
+
         Destroy(this.gameObject);
     }
 

@@ -57,6 +57,7 @@ MonoBehaviour:
   _damageColor: {r: 1, g: 0, b: 0, a: 1}
   _flashDuration: 0.1
   _healthBarFill: {fileID: 0}
+  _eyeSide: Right
 --- !u!114 &9056428069242282718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +130,7 @@ MonoBehaviour:
   _damageColor: {r: 1, g: 0, b: 0, a: 1}
   _flashDuration: 0.1
   _healthBarFill: {fileID: 0}
+  _eyeSide: Left
 --- !u!114 &8430961111080986271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,7 +508,7 @@ MonoBehaviour:
   _spitGrowSpeed: 0.5
   _spitLifeTime: 15
   _delayBeforeSpitting: 10
-  _spitSound: {fileID: 0}
+  _spitSound: {fileID: 8300000, guid: 6146cb7a11dea401b8b29d3b0c293228, type: 3}
   _spitSlideSpeed: 3
   _bossAudioSource: {fileID: 1097632974202477034}
   _rightEye: {fileID: 1993492433753090755}
@@ -617,6 +619,7 @@ GameObject:
   - component: {fileID: 6480133935767878067}
   - component: {fileID: 6480133935767878066}
   - component: {fileID: 7217598829365527791}
+  - component: {fileID: 2719165589254280727}
   m_Layer: 0
   m_Name: 'BossRightHand '
   m_TagString: Untagged
@@ -631,14 +634,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6480133935767878064}
-  m_LocalRotation: {x: -0.3171358, y: 0.0014537544, z: -0.23226598, w: 0.9194973}
+  m_LocalRotation: {x: -0.31538555, y: -0.03330765, z: -0.13010596, w: 0.9394121}
   m_LocalPosition: {x: 4.373964, y: -1.8745562, z: 0}
   m_LocalScale: {x: 0.5576665, y: 0.5576664, z: 0.5576665}
   m_Children:
   - {fileID: 800370779243672295}
   m_Father: {fileID: 6480133935222328049}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -35.629, y: 10.634001, z: -31.779001}
+  m_LocalEulerAnglesHint: {x: -36.957, y: 1.3970001, z: -16.237001}
 --- !u!212 &6480133935767878066
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -707,6 +710,25 @@ MonoBehaviour:
   _projectileLifetime: 3
   _minProjectiles: 4
   _maxProjectiles: 8
+--- !u!95 &2719165589254280727
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480133935767878064}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fe9ea5289c64c4dcf934f031b154a3ca, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6480133936037159326
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,6 +740,8 @@ GameObject:
   - component: {fileID: 6480133936037159313}
   - component: {fileID: -1467175240270597114}
   - component: {fileID: 2831356236296278534}
+  - component: {fileID: 3184156154788922862}
+  - component: {fileID: 873166081796455760}
   m_Layer: 0
   m_Name: BossMaster
   m_TagString: Untagged
@@ -854,6 +878,37 @@ MonoBehaviour:
   _bossSpit: {fileID: 8300000, guid: 6146cb7a11dea401b8b29d3b0c293228, type: 3}
   _bossShortGrowl: {fileID: 8300000, guid: 23b2ce46c7de14049b543bbeab633c60, type: 3}
   _audioSource: {fileID: 0}
+--- !u!114 &3184156154788922862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480133936037159326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45b08637e946d4e59b2d549855e18ca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _finalGrowlClip: {fileID: 8300000, guid: d611bdffa2813465fa67905ecd22bad4, type: 3}
+  _bossRightHand: {fileID: 6480133935767878064}
+  _delayBeforeShrink: 1
+  _bossLeftHand: {fileID: 3489029136922242693}
+--- !u!114 &873166081796455760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6480133936037159326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4ae6e2581164bc68cb987b5acade33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shrinkDuration: 3
+  _targetScale: {x: 0, y: 0, z: 0}
+  _destroyAfterShrink: 1
 --- !u!1 &6480133936208736428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,6 +1229,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e29092d792f34ebd864ace654ddfa3c, type: 3}
+--- !u!1 &1993492433753090755 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2697070701403985919, guid: 5e29092d792f34ebd864ace654ddfa3c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4523766101301296444}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1993492433753090754 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2697070701403985918, guid: 5e29092d792f34ebd864ace654ddfa3c,
@@ -1183,12 +1244,6 @@ Transform:
 --- !u!212 &1993492433753090753 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2697070701403985917, guid: 5e29092d792f34ebd864ace654ddfa3c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4523766101301296444}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1993492433753090755 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2697070701403985919, guid: 5e29092d792f34ebd864ace654ddfa3c,
     type: 3}
   m_PrefabInstance: {fileID: 4523766101301296444}
   m_PrefabAsset: {fileID: 0}
