@@ -65,16 +65,11 @@ public class BossEyeDeathHandler : MonoBehaviour
 
         }   yield return new WaitForSeconds(_delayBeforeShrink);
 
+        FindObjectOfType<SpawnManager>().HideEyeHealthBars();
+
         GetComponent<BossShrinkExit>().StartShrinkExit();
-    }
 
+        FindObjectOfType<SpawnManager>().ResumeWaveAfterBoss();
 
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class SpawnManager : MonoBehaviour
 
 {
-    [SerializeField]private GameObject _enemyprefab;
+    [SerializeField] private GameObject _enemyprefab;
     [SerializeField] private GameObject _horizontalEnemyPrefab;
     [SerializeField] private GameObject _whiteEnemyPrefab;
-    [SerializeField]private GameObject _enemyContainer;
+    [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject _dodgeEnemyPrefab;
     [SerializeField] private float _dodgeEnemySpawnChance = 0.2f; // 20% chance instead of regular enemy
 
@@ -211,11 +211,24 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(SpawnPowerupRoutine());
         }
 
-        yield break; // Exit the coroutine, no more regular waves
-
+        //yield break; // Exit the coroutine, no more regular waves
+        //_bossSpawned = true;
+        _stopEnemySpawning = false;
+        //_currentWave++;
+        //_uiManager.UpdateWaveText(_currentWave);
+        //StartCoroutine(SpawnEnemyWaves());
 
 
     }
+
+    public void ResumeWaveAfterBoss()
+    {
+        _stopEnemySpawning = false;
+        _currentWave++;
+        _uiManager.UpdateWaveText(_currentWave);
+        StartCoroutine(SpawnEnemyWaves());
+    }
+
     IEnumerator SpawnEnemyWaves()
     {
         yield return new WaitForSeconds(3.0f);// Wait a few seconds before the first wave starts
@@ -314,6 +327,11 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    public void HideEyeHealthBars()
+    {
+        if (_leftEyeHealthBarGO != null) _leftEyeHealthBarGO.SetActive(false);
+        if (_rightEyeHealthBarGO != null) _rightEyeHealthBarGO.SetActive(false);
+    }
 
 
 

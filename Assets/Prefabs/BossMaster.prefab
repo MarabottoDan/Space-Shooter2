@@ -892,7 +892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _finalGrowlClip: {fileID: 8300000, guid: d611bdffa2813465fa67905ecd22bad4, type: 3}
   _bossRightHand: {fileID: 6480133935767878064}
-  _delayBeforeShrink: 1
+  _delayBeforeShrink: 5
   _bossLeftHand: {fileID: 3489029136922242693}
 --- !u!114 &873166081796455760
 MonoBehaviour:

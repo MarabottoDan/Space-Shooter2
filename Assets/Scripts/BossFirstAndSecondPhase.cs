@@ -111,13 +111,7 @@ public class BossFirstAndSecondPhase : MonoBehaviour
 
     public void DoSpitAttack()
     {
-       if (_spitPrefab == null || _spitSpawnPoint == null)
-        {
-            Debug.LogWarning("Spit prefab not assigned");
-            return;
-        }
-
-        GameObject spitInstance = Instantiate(_spitPrefab, _spitSpawnPoint.position, Quaternion.identity);
+       
 
         if (_bossAudioSource != null && _spitSound != null)
         {
@@ -128,6 +122,13 @@ public class BossFirstAndSecondPhase : MonoBehaviour
         {
             Debug.LogWarning("Boss AudioSource or spit sound missing.");
         }
+        if (_spitPrefab == null || _spitSpawnPoint == null)
+        {
+            Debug.LogWarning("Spit prefab not assigned");
+            return;
+        }
+
+        GameObject spitInstance = Instantiate(_spitPrefab, _spitSpawnPoint.position, Quaternion.identity);
 
 
         StartCoroutine(GrowSpit(spitInstance));

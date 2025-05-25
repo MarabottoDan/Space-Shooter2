@@ -135,7 +135,15 @@ public class UIManager : MonoBehaviour
 
     public void UpdateWaveText( int wave)// Updates the wave counter UI with the current wave number
     {
-        _waveCounterText.text = "Wave: " + wave; // Set the text to display the wave number
+        if (wave == -1)
+        {
+            _waveCounterText.text = "Boss";
+        }
+        else
+        {
+            _waveCounterText.text = "Wave: " + wave; // Set the text to display the wave number
+        }
+        
     }
 
     public IEnumerator ShowWaveCountDown (int seconds)// Displays a countdown message before the next wave starts
