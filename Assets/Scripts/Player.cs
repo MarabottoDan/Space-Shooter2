@@ -161,12 +161,12 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C) && _canPull)
         {
-            StartCoroutine(PullRoutine());// This will be called...
+            StartCoroutine(PullRoutine());
         }
 
         if (_isPullingPickups)
         {
-            PullPickups();//We'll define this function next.
+            PullPickups();
         }
       
     }
@@ -177,7 +177,7 @@ public class Player : MonoBehaviour
         if (_iceBlastPrefab != null && _iceBlastSpawnPoint != null)
         {
             Instantiate(_iceBlastPrefab, _iceBlastSpawnPoint.position, Quaternion.identity);
-            Debug.Log("❄️ IceBlast fired automatically!");
+            Debug.Log("IceBlast fired automatically!");
         }
         else
         {
@@ -228,6 +228,8 @@ public class Player : MonoBehaviour
         
         _canPull = true;
     }
+
+
     // This method finds nearby pickups and pulls them toward the player while the magnet is active
     private void PullPickups()
     {   // Find all GameObjects in the scene tagged as "Pickup"

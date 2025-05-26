@@ -899,7 +899,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670538832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0181408, y: 0.53973484, z: -2143.1116}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 876355665}
@@ -1369,7 +1369,7 @@ MonoBehaviour:
   _missileSpawnPoint: {fileID: 657174960}
   _chainLightningShotPrefab: {fileID: 979781116792606847, guid: 3c1675369fcec4e6cb544a69a77c3bb6,
     type: 3}
-  _isChainLightningActive: 0
+  _isChainLightningActive: 1
   _fireRate: 0.1
   _lives: 100
   _pickupPullSpeed: 10
@@ -2148,7 +2148,7 @@ MonoBehaviour:
   _dodgeEnemySpawnChance: 0.2
   _bossPrefab: {fileID: 6480133936037159326, guid: 82a885f0be1864721b3d3546a95136f4,
     type: 3}
-  _startWave: 5
+  _startWave: 1
   _bossIntroClipDelay: 2
   _bossSpawnDelay: 1
   _bossGrowDuration: 1
@@ -2167,7 +2167,7 @@ MonoBehaviour:
   _rightEyeHealthBarGO: {fileID: 79518904}
   _leftEyeHealthBarFill: {fileID: 419896073}
   _rightEyeHealthBarFill: {fileID: 79518905}
-  _testBossMode: 1
+  _testBossMode: 0
   _testBossDelay: 3
   _powerups:
   - {fileID: 7359689525463552611, guid: 7bd29b2d94a5d4888825273d59c6c06f, type: 3}
@@ -2181,7 +2181,7 @@ MonoBehaviour:
   _smartEnemyPrefab: {fileID: 105461855958612930, guid: 29b655ffb13344f27b21c490cb4df9a4,
     type: 3}
   _smartEnemySpawnChance: 0.2
-  _startRegularEnemyCount: 3
+  _startRegularEnemyCount: 1
   _startHorizontalEnemyCount: 1
   _uiManager: {fileID: 1497819660}
 --- !u!4 &1255546757
@@ -3259,7 +3259,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577375531}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2826948, y: 3.0749862, z: -58.39521}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

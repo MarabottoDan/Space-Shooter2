@@ -62,7 +62,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private UIManager _uiManager;// Reference to the UIManager script to update wave UI and countdown
 
     private int _currentWave;
-    //private bool _stopSpawning = false;// Flag to stop spawning when the player dies
     private bool _stopEnemySpawning = false;
     private bool _stopPowerupSpawning = false;
 
@@ -202,12 +201,12 @@ public class SpawnManager : MonoBehaviour
         }
         if (_bossHealthBarFillGO != null)
         {
-            _bossHealthBarFillGO.SetActive(true); // ✅ Enable it on boss spawn
+            _bossHealthBarFillGO.SetActive(true); // Enable it on boss spawn
         }
 
         if (!_stopPowerupSpawning)
         {
-            Debug.Log("✅ Starting powerup spawner for boss wave.");
+            Debug.Log("Starting powerup spawner for boss wave.");
             StartCoroutine(SpawnPowerupRoutine());
         }
 

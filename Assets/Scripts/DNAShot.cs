@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DNAShot : MonoBehaviour
 {
@@ -68,10 +67,8 @@ public class DNAShot : MonoBehaviour
     {
         if ( _rb != null)
         {
-            _rb.velocity = new Vector2(-_rb.velocity.x, _rb.velocity.y);// Reverse X direction
-            //Only flip(reverse) the left-right movement, but don't touch the up/down movement
-            //-_rb.velocity.x ➔ Flip the X value(left<-> right).
-         // _rb.velocity.y ➔ Leave Y value unchanged(still go up or down as before).
+            _rb.velocity = new Vector2(-_rb.velocity.x, _rb.velocity.y);
+          
             _hasBounced = true;// Mark as bounced
         }
     }

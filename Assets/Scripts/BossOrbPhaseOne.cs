@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BossOrbPhaseOne : MonoBehaviour
 {
@@ -27,8 +26,6 @@ public class BossOrbPhaseOne : MonoBehaviour
 
     private void Start()
     {
-        
-
         Debug.Log("Orb spawned at: " + transform.position);
         _baseScale = transform.localScale;
         _player = GameObject.FindWithTag("Player")?.transform;
